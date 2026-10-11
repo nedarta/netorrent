@@ -1,6 +1,8 @@
 build-x64/
 build-x86/
 build/
+vcpkg_installed/
+.vcpkg-root
 docs/build
 src/installer/bin
 src/installer/obj

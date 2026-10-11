@@ -1,0 +1,25 @@
+[index]
+root = "."
+
+# NeTorrent is a C++ app whose vendored dependencies (vendor/wx, vendor/vcpkg,
+# vendor/antlr4, vendor/sentry-crashpad) are third-party code we don't want in the
+# index, so the bindings below are limited to our own source trees.
+
+[target_bindings]
+cpp = ["include", "src", "src/pql"]
+
+# Markdown/notes across the repo (README, ROADMAP, docs), excluding vendored trees.
+[[target]]
+name = "notes-and-docs"
+language = "markdown"
+kind = "docs"
+directories = ["."]
+include = ["**/*.md"]
+exclude = ["vendor/**", "build-x64/**", "build-x86/**", "docs/build/**"]
+
+# Local, CPU-friendly static embeddings (model2vec). No GPU or remote service needed.
+[llm.embedding]
+model = "minishlab/potion-retrieval-32M"
+
+[watch]
+enabled = true

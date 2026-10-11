@@ -36,6 +36,9 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# In PowerShell 7.3+, native stderr would otherwise become a terminating error
+# under ErrorActionPreference = 'Stop'; we want to inspect the exit code instead.
+if ($PSVersionTable.PSVersion.Major -ge 7) { $PSNativeCommandUseErrorActionPreference = $false }
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
 
@@ -107,6 +110,17 @@ if (-not (Test-Path $vcpkgExe)) {
     if ($LASTEXITCODE -ne 0) { throw "vcpkg bootstrap failed" }
 }
 
+# --- Vendored nested dependencies --------------------------------------------
+# wxWidgets keeps its third-party libs (zlib, png, expat, tiff, jpeg, scintilla...)
+# in nested submodules. A shallow top-level fetch can leave them empty, which
+# shows up later as "No SOURCES given to target: wxzlib".
+$wxZlibSource = Join-Path $Root 'vendor/wx/src/zlib/adler32.c'
+if (-not (Test-Path $wxZlibSource)) {
+    Write-Host "==> Initializing wxWidgets nested submodules"
+    & git -C (Join-Path $Root 'vendor/wx') submodule update --init --recursive --depth 1
+    if ($LASTEXITCODE -ne 0) { throw "failed to initialize wxWidgets submodules" }
+}
+
 # --- Version information -----------------------------------------------------
 function Get-BuildVersion {
     param([string]$Override)
@@ -127,7 +141,9 @@ $branch   = (& git rev-parse --abbrev-ref HEAD).Trim()
 Write-Host "==> Version $version ($branch @ $shortSha)"
 
 # --- Configure ---------------------------------------------------------------
-Write-Host "==> Configuring CMake"
+New-Item -ItemType Directory -Force -Path $BuildDir | Out-Null
+$configureLog = Join-Path $BuildDir 'configure.log'
+Write-Host "==> Configuring CMake (log: $configureLog)"
 & $cmake -S $Root -B $BuildDir -G $VsGenerator -A $Platform `
     "-DVCPKG_TARGET_TRIPLET=$Triplet" `
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" `
@@ -137,14 +153,23 @@ Write-Host "==> Configuring CMake"
     "-DGITVERSION_VAR_VERSION_MAJOR=$verMajor" `
     "-DGITVERSION_VAR_VERSION_MINOR=$verMinor" `
     "-DGITVERSION_VAR_VERSION_PATCH=$verPatch" `
-    "-DGITVERSION_VAR_VERSION=$version"
-if ($LASTEXITCODE -ne 0) { throw "CMake configure failed" }
+    "-DGITVERSION_VAR_VERSION=$version" 2>&1 | Tee-Object -FilePath $configureLog
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "--- last 40 lines of configure.log ---" -ForegroundColor Yellow
+    Get-Content $configureLog -Tail 40
+    throw "CMake configure failed (see $configureLog)"
+}
 
 # --- Build -------------------------------------------------------------------
 $buildArgs = @('--build', $BuildDir, '--config', $Configuration)
 if ($Target) { $buildArgs += @('--target', $Target) }
-Write-Host "==> Building ($Configuration)"
-& $cmake @buildArgs
-if ($LASTEXITCODE -ne 0) { throw "CMake build failed" }
+$buildLog = Join-Path $BuildDir 'build.log'
+Write-Host "==> Building ($Configuration, log: $buildLog)"
+& $cmake @buildArgs 2>&1 | Tee-Object -FilePath $buildLog
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "--- last 40 lines of build.log ---" -ForegroundColor Yellow
+    Get-Content $buildLog -Tail 40
+    throw "CMake build failed (see $buildLog)"
+}
 
 Write-Host "==> Done. Artifacts in $BuildDir\$Configuration" -ForegroundColor Green

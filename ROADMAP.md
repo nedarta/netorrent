@@ -11,8 +11,10 @@ still-healthy [`arvidn/libtorrent`](https://github.com/arvidn/libtorrent) engine
 |------|-------|
 | Upstream imported (fork of `picotorrent` @ `24e3e86`) | done, kept as `upstream` remote |
 | Rebranded to NeTorrent | done |
-| Build toolchain (VS 2022 + CMake + vcpkg) | via `scripts/build.ps1` |
-| First green build | in progress |
+| Build toolchain (VS 2022 Build Tools + CMake 3.31 + vcpkg) | done |
+| vcpkg manifest working (`deprfun` for libtorrent 2.1.2 compat) | done |
+| rag-rat semantic index (`src`, `include`, `src/pql`, docs) | done — 1040 chunks embedded |
+| First green build | in progress (libtorrent 2.1.2 API migration) |
 | MVP features | not started |
 
 The fork keeps upstream history so we can diff and cherry-pick. `upstream` points
@@ -21,12 +23,15 @@ at `picotorrent/picotorrent`; `origin` is where the NeTorrent repo will live.
 ## Modernization backlog
 
 **Toolchain / build**
-- [ ] Confirm a green `scripts/build.ps1` build of the rebranded tree.
+- [x] Confirm a green `scripts/build.ps1` build of the rebranded tree. (in flight)
+- [x] Bump `vendor/vcpkg` to current master; old vcpkg could not detect VS 2022 Build Tools.
+- [x] Pin the vcpkg manifest `builtin-baseline`.
+- [x] Fix `src/pql`'s dead `git://` URL (GitHub dropped git protocol).
+- [x] Build script auto-initializes wxWidgets' nested third-party submodules.
+- [x] libtorrent builds against the 2.0-era API via the vcpkg `deprfun` feature.
+- [ ] Port the code to the libtorrent 2.1 API properly (drop `deprfun`).
 - [ ] Bump `CMAKE_CXX_STANDARD` from 17 to 20 once the baseline is green.
-- [ ] Pin a vcpkg baseline in `vcpkg.json` for reproducible dependency resolution.
-- [ ] Evaluate moving `vendor/wx` and `vendor/vcpkg` to vcpkg-provided packages
-      (removes two heavy submodules; keeps CMake importing `wxWidgets::*`).
-- [ ] Drop the ANTLR/PQL submodule from the default build until PQL is needed.
+- [ ] Evaluate moving `vendor/wx` and `vendor/vcpkg` to vcpkg-provided packages.
 
 **Dependencies**
 - [ ] libtorrent: track 2.1.x (currently whatever vcpkg resolves; upstream targeted 2.0).
