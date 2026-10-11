@@ -14,7 +14,7 @@ still-healthy [`arvidn/libtorrent`](https://github.com/arvidn/libtorrent) engine
 | Build toolchain (VS 2022 Build Tools + CMake 3.31 + vcpkg) | done |
 | vcpkg manifest working (`deprfun` for libtorrent 2.1.2 compat) | done |
 | rag-rat semantic index (`src`, `include`, `src/pql`, docs) | done — 1040 chunks embedded |
-| First green build | in progress (libtorrent 2.1.2 API migration) |
+| First green build | done — `NeTorrent.exe` runs, migrates DB, loads translations, listens on 6881 |
 | MVP features | not started |
 
 The fork keeps upstream history so we can diff and cherry-pick. `upstream` points
@@ -28,7 +28,8 @@ at `picotorrent/picotorrent`; `origin` is where the NeTorrent repo will live.
 - [x] Pin the vcpkg manifest `builtin-baseline`.
 - [x] Fix `src/pql`'s dead `git://` URL (GitHub dropped git protocol).
 - [x] Build script auto-initializes wxWidgets' nested third-party submodules.
-- [x] libtorrent builds against the 2.0-era API via the vcpkg `deprfun` feature.
+- [x] libtorrent builds against the 2.0-era API via the vcpkg `deprfun` feature
+      (interim; see the port item below).
 - [ ] Port the code to the libtorrent 2.1 API properly (drop `deprfun`).
 - [ ] Bump `CMAKE_CXX_STANDARD` from 17 to 20 once the baseline is green.
 - [ ] Evaluate moving `vendor/wx` and `vendor/vcpkg` to vcpkg-provided packages.
