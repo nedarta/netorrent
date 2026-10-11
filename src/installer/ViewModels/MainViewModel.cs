@@ -1,14 +1,14 @@
 ﻿using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using PicoTorrentBootstrapper.Models;
-using PicoTorrentBootstrapper.Views;
+using NeTorrentBootstrapper.Models;
+using NeTorrentBootstrapper.Views;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 
-namespace PicoTorrentBootstrapper.ViewModels
+namespace NeTorrentBootstrapper.ViewModels
 {
     public sealed class MainViewModel : PropertyNotifyBase
     {
@@ -65,9 +65,9 @@ namespace PicoTorrentBootstrapper.ViewModels
                             lock (this)
                             {
                                 Canceled = MessageBox.Show(
-                                    PicoBA.View,
+                                    NeBA.View,
                                     "Are you sure you want to cancel?",
-                                    "PicoTorrent",
+                                    "NeTorrent",
                                     MessageBoxButton.YesNo,
                                     MessageBoxImage.Error) == MessageBoxResult.Yes;
                             }
@@ -85,7 +85,7 @@ namespace PicoTorrentBootstrapper.ViewModels
             {
                 if (_closeCommand == null)
                 {
-                    _closeCommand = new RelayCommand(_ => PicoBA.View.Close());
+                    _closeCommand = new RelayCommand(_ => NeBA.View.Close());
                 }
 
                 return _closeCommand;
@@ -180,24 +180,24 @@ namespace PicoTorrentBootstrapper.ViewModels
                 if (_bootstrapper.Command.Display == Display.Passive)
                 {
                     _bootstrapper.Engine.Log(LogLevel.Verbose, "Automatically closing the window for non-interactive install");
-                    PicoBA.Dispatcher.BeginInvoke(new Action(PicoBA.View.Close));
+                    NeBA.Dispatcher.BeginInvoke(new Action(NeBA.View.Close));
                 }
                 else
                 {
-                    PicoBA.Dispatcher.InvokeShutdown();
+                    NeBA.Dispatcher.InvokeShutdown();
                 }
                 return;
             }
             else if (e.Status >= 0 && PlannedAction == LaunchAction.UpdateReplace) // if we successfully applied an update close the window since the new Bundle should be running now.
             {
                 _bootstrapper.Engine.Log(LogLevel.Verbose, "Automatically closing the window since update successful.");
-                PicoBA.Dispatcher.BeginInvoke(new Action(PicoBA.View.Close));
+                NeBA.Dispatcher.BeginInvoke(new Action(NeBA.View.Close));
                 return;
             }
 
             // Force all commands to reevaluate CanExecute.
             // InvalidateRequerySuggested must be run on the UI thread.
-            PicoBA.Dispatcher.Invoke(new Action(CommandManager.InvalidateRequerySuggested));
+            NeBA.Dispatcher.Invoke(new Action(CommandManager.InvalidateRequerySuggested));
         }
 
         private void OnDetectBegin(object sender, DetectBeginEventArgs e)
@@ -234,7 +234,7 @@ namespace PicoTorrentBootstrapper.ViewModels
 
             // Force all commands to reevaluate CanExecute.
             // InvalidateRequerySuggested must be run on the UI thread.
-            PicoBA.Dispatcher.Invoke(new Action(CommandManager.InvalidateRequerySuggested));
+            NeBA.Dispatcher.Invoke(new Action(CommandManager.InvalidateRequerySuggested));
 
             InstallModel.Refresh();
         }
@@ -249,7 +249,7 @@ namespace PicoTorrentBootstrapper.ViewModels
 
         private void OnDetectRelatedMsiPackage(object sender, DetectRelatedMsiPackageEventArgs e)
         {
-            if (e.PackageId == "PicoTorrentPackage"
+            if (e.PackageId == "NeTorrentPackage"
                 && e.Operation == RelatedOperation.MajorUpgrade)
             {
                 var existingProduct = new ProductInstallation(e.ProductCode);

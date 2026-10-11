@@ -4,7 +4,7 @@ build/
 docs/build
 src/installer/bin
 src/installer/obj
-src/picotorrent/buildinfo.cpp
+src/netorrent/buildinfo.cpp
 tools
 .vscode
 [D|d]ebug

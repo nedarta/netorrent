@@ -1,9 +1,9 @@
 ﻿using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using PicoTorrentBootstrapper.Models;
+using NeTorrentBootstrapper.Models;
 using System;
 using System.ComponentModel;
 
-namespace PicoTorrentBootstrapper.ViewModels
+namespace NeTorrentBootstrapper.ViewModels
 {
     public sealed class ProgressViewModel : PropertyNotifyBase
     {

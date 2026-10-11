@@ -1,12 +1,12 @@
 ﻿using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using PicoTorrentBootstrapper.Models;
-using PicoTorrentBootstrapper.Views;
+using NeTorrentBootstrapper.Models;
+using NeTorrentBootstrapper.Views;
 using System;
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace PicoTorrentBootstrapper.ViewModels
+namespace NeTorrentBootstrapper.ViewModels
 {
     public sealed class UninstallViewModel : PropertyNotifyBase
     {

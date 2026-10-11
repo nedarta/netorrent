@@ -20,10 +20,10 @@ var BootstrapperDirectory = Directory("./src/installer/bin") + Directory(configu
 var ResourceDirectory     = Directory("./res");
 
 var Version            = GitVersion();
-var Installer          = string.Format("PicoTorrent-{0}-{1}.msi", Version.SemVer, platform);
-var InstallerBundle    = string.Format("PicoTorrent-{0}-{1}.exe", Version.SemVer, platform);
-var PortablePackage    = string.Format("PicoTorrent-{0}-{1}.zip", Version.SemVer, platform);
-var SymbolsPackage     = string.Format("PicoTorrent-{0}-{1}.symbols.zip", Version.SemVer, platform);
+var Installer          = string.Format("NeTorrent-{0}-{1}.msi", Version.SemVer, platform);
+var InstallerBundle    = string.Format("NeTorrent-{0}-{1}.exe", Version.SemVer, platform);
+var PortablePackage    = string.Format("NeTorrent-{0}-{1}.zip", Version.SemVer, platform);
+var SymbolsPackage     = string.Format("NeTorrent-{0}-{1}.symbols.zip", Version.SemVer, platform);
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -80,7 +80,7 @@ Task("Build")
                 .SetPlatformTarget(PlatformTarget.x64);
     }
 
-    MSBuild(OutputDirectory + File("PicoTorrent.vcxproj"), settings);
+    MSBuild(OutputDirectory + File("NeTorrent.vcxproj"), settings);
 
     // Plugins
     MSBuild(OutputDirectory + File("Plugin_Updater.vcxproj"), settings);
@@ -92,7 +92,7 @@ Task("Setup-Publish-Directory")
 {
     var files = new FilePath[]
     {
-        MakeAbsolute(BuildDirectory + File("PicoTorrent.exe")),
+        MakeAbsolute(BuildDirectory + File("NeTorrent.exe")),
         MakeAbsolute(BuildDirectory + File("coredb.sqlite")),
         MakeAbsolute(BuildDirectory + File("crashpad_handler.exe")),
         MakeAbsolute(BuildDirectory + File("Plugin_Updater.dll")),
@@ -120,16 +120,16 @@ Task("Build-Installer")
 
     var sourceFiles = new FilePath[]
     {
-        "./packaging/WiX/PicoTorrent.wxs",
-        "./packaging/WiX/PicoTorrent.Components.wxs",
-        "./packaging/WiX/PicoTorrent.Directories.wxs"
+        "./packaging/WiX/NeTorrent.wxs",
+        "./packaging/WiX/NeTorrent.Components.wxs",
+        "./packaging/WiX/NeTorrent.Directories.wxs"
     };
 
     var objFiles = new FilePath[]
     {
-        BuildDirectory + File("PicoTorrent.wixobj"),
-        BuildDirectory + File("PicoTorrent.Components.wixobj"),
-        BuildDirectory + File("PicoTorrent.Directories.wixobj")
+        BuildDirectory + File("NeTorrent.wixobj"),
+        BuildDirectory + File("NeTorrent.Components.wixobj"),
+        BuildDirectory + File("NeTorrent.Directories.wixobj")
     };
 
     WiXCandle(sourceFiles, new CandleSettings
@@ -165,7 +165,7 @@ Task("Build-Installer-Bootstrapper")
         .SetMaxCpuCount(0)
         .UseToolVersion(MSBuildToolVersion.VS2022);
 
-    MSBuild("./src/installer/PicoTorrentBootstrapper.sln", settings);
+    MSBuild("./src/installer/NeTorrentBootstrapper.sln", settings);
 });
 
 Task("Build-Installer-Bundle")
@@ -180,20 +180,20 @@ Task("Build-Installer-Bundle")
         arch = Architecture.X86;
     }
 
-    WiXCandle("./packaging/WiX/PicoTorrentBundle.wxs", new CandleSettings
+    WiXCandle("./packaging/WiX/NeTorrentBundle.wxs", new CandleSettings
     {
         Architecture = arch,
         Extensions = new [] { "WixBalExtension", "WixNetFxExtension", "WixUtilExtension" },
         Defines = new Dictionary<string, string>
         {
-            { "PicoTorrentInstaller", PackagesDirectory + File(Installer) },
+            { "NeTorrentInstaller", PackagesDirectory + File(Installer) },
             { "Platform", platform },
             { "Version", Version.MajorMinorPatch }
         },
         OutputDirectory = BuildDirectory
     });
 
-    WiXLight((BuildDirectory + File("PicoTorrentBundle.wixobj")).ToString(), new LightSettings
+    WiXLight((BuildDirectory + File("NeTorrentBundle.wixobj")).ToString(), new LightSettings
     {
         Extensions = new [] { "WixBalExtension", "WixNetFxExtension", "WixUtilExtension" },
         OutputFile = PackagesDirectory + File(InstallerBundle)
@@ -214,7 +214,7 @@ Task("Build-Symbols-Package")
 {
     var files = new FilePath[]
     {
-        BuildDirectory + File("PicoTorrent.pdb"),
+        BuildDirectory + File("NeTorrent.pdb"),
     };
 
     Zip(BuildDirectory, PackagesDirectory + File(SymbolsPackage), files);

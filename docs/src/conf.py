@@ -24,8 +24,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'PicoTorrent'
-copyright = u'2020 PicoTorrent contributors'
+project = u'NeTorrent'
+copyright = u'2020 NeTorrent contributors'
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'

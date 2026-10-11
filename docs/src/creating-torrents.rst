@@ -1,7 +1,7 @@
 Creating Torrents
 =================
 
-PicoTorrent has a simple dialog for creating torrents. You can create single-
+NeTorrent has a simple dialog for creating torrents. You can create single-
 or multi-file torrents in v1, v2 or hybrid mode.
 
 .. image:: static/create-torrent.png
@@ -14,7 +14,7 @@ Options
 Mode
 ----
 
-PicoTorrent supports creating torrents in any mode.
+NeTorrent supports creating torrents in any mode.
 
  * v1 is the classic torrent file format.
  * v2 is the new BitTorrent 2.0 file format.
@@ -35,7 +35,7 @@ Creator
 -------
 
 The software used to create the torrent. This can be left blank, but the
-default value is the current PicoTorrent version.
+default value is the current NeTorrent version.
 
 
 Private
@@ -49,7 +49,7 @@ only the tracker.
 Add to session
 --------------
 
-Not a torrent option, but if checked will add the torrent to PicoTorrent and
+Not a torrent option, but if checked will add the torrent to NeTorrent and
 begin seed it.
 
 

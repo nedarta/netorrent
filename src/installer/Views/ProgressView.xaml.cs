@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace PicoTorrentBootstrapper.Views
+namespace NeTorrentBootstrapper.Views
 {
     public partial class ProgressView : UserControl
     {

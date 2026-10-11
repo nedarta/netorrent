@@ -32,8 +32,8 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: PicoTorrent-${{ matrix.arch }}-CI-binaries
+          name: NeTorrent-${{ matrix.arch }}-CI-binaries
           path: |
-            build-${{ matrix.arch }}/Release/packages/PicoTorrent-*-${{ matrix.arch }}.exe
-            build-${{ matrix.arch }}/Release/packages/PicoTorrent-*-${{ matrix.arch }}.zip
-            build-${{ matrix.arch }}/Release/packages/PicoTorrent-*-${{ matrix.arch }}.symbols.zip
+            build-${{ matrix.arch }}/Release/packages/NeTorrent-*-${{ matrix.arch }}.exe
+            build-${{ matrix.arch }}/Release/packages/NeTorrent-*-${{ matrix.arch }}.zip
+            build-${{ matrix.arch }}/Release/packages/NeTorrent-*-${{ matrix.arch }}.symbols.zip

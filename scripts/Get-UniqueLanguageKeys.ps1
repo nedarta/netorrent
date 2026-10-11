@@ -4,7 +4,7 @@ $lang = Get-Content lang/en-US.json
 
 $out=@{}
 
-Get-ChildItem -Recurse src/picotorrent
+Get-ChildItem -Recurse src/netorrent
     | Select-String -Pattern 'i18n\(\"([a-zA-Z0-9_]+?)\"\)' -AllMatches
     | ForEach-Object { $_.Matches }
     | ForEach-Object { $_.Groups[1].Value }

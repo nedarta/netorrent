@@ -1,4 +1,4 @@
-﻿namespace PicoTorrentBootstrapper.Models
+﻿namespace NeTorrentBootstrapper.Models
 {
     /// <summary>
     /// The states of detection.

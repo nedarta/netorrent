@@ -1,4 +1,4 @@
-#include <libpico.h>
+#include <libnetorrent.h>
 
 #include <string>
 #include <Windows.h>
@@ -17,36 +17,36 @@
 struct updater_request_data_t
 {
     bool force;
-    libpico_config_t* config;
-    libpico_mainwnd_t* wnd;
+    libnetorrent_config_t* config;
+    libnetorrent_mainwnd_t* wnd;
 };
 
-void show_available_update(libpico_mainwnd_t* wnd, libpico_config_t* config, const char* version, const char* url)
+void show_available_update(libnetorrent_mainwnd_t* wnd, libnetorrent_config_t* config, const char* version, const char* url)
 {
     HWND hWnd = nullptr;
-    libpico_mainwnd_native_handle(wnd, reinterpret_cast<void**>(&hWnd));
+    libnetorrent_mainwnd_native_handle(wnd, reinterpret_cast<void**>(&hWnd));
 
     // get wide version
     wchar_t versionw[100];
-    libpico_string_towide(version, versionw, 100);
+    libnetorrent_string_towide(version, versionw, 100);
 
     wchar_t content[DEFAULT_I18N_BUFFER_SIZE];
     size_t content_len = DEFAULT_I18N_BUFFER_SIZE;
-    libpico_i18n("new_version_available", content, &content_len);
+    libnetorrent_i18n("new_version_available", content, &content_len);
 
     wchar_t main[DEFAULT_I18N_BUFFER_SIZE];
     wchar_t main_format[DEFAULT_I18N_BUFFER_SIZE];
     size_t main_len = DEFAULT_I18N_BUFFER_SIZE;
-    libpico_i18n("picotorrent_v_available", main, &main_len);
+    libnetorrent_i18n("netorrent_v_available", main, &main_len);
     swprintf(main_format, DEFAULT_I18N_BUFFER_SIZE, main, versionw);
 
     wchar_t verification[DEFAULT_I18N_BUFFER_SIZE];
     size_t verification_len = DEFAULT_I18N_BUFFER_SIZE;
-    libpico_i18n("ignore_update", verification, &verification_len);
+    libnetorrent_i18n("ignore_update", verification, &verification_len);
 
     wchar_t show[DEFAULT_I18N_BUFFER_SIZE];
     size_t show_len = DEFAULT_I18N_BUFFER_SIZE;
-    libpico_i18n("show_on_github", show, &show_len);
+    libnetorrent_i18n("show_on_github", show, &show_len);
 
     const TASKDIALOG_BUTTON pButtons[] =
     {
@@ -62,7 +62,7 @@ void show_available_update(libpico_mainwnd_t* wnd, libpico_config_t* config, con
     tdf.pszMainIcon = TD_INFORMATION_ICON;
     tdf.pszMainInstruction = main_format;
     tdf.pszVerificationText = verification;
-    tdf.pszWindowTitle = TEXT("PicoTorrent");
+    tdf.pszWindowTitle = TEXT("NeTorrent");
 
     int pnButton = -1;
     int pnRadioButton = -1;
@@ -73,7 +73,7 @@ void show_available_update(libpico_mainwnd_t* wnd, libpico_config_t* config, con
     if (pnButton == 1000)
     {
         wchar_t urlw[255];
-        libpico_string_towide(url, urlw, 255);
+        libnetorrent_string_towide(url, urlw, 255);
 
         SHELLEXECUTEINFO sei;
         ZeroMemory(&sei, sizeof(SHELLEXECUTEINFO));
@@ -89,7 +89,7 @@ void show_available_update(libpico_mainwnd_t* wnd, libpico_config_t* config, con
 
     if (pfVerificationFlagChecked)
     {
-        libpico_config_string_set(
+        libnetorrent_config_string_set(
             config,
             "update_checks.ignored_version",
             version,
@@ -97,14 +97,14 @@ void show_available_update(libpico_mainwnd_t* wnd, libpico_config_t* config, con
     }
 }
 
-void show_no_update(libpico_mainwnd_t* wnd)
+void show_no_update(libnetorrent_mainwnd_t* wnd)
 {
     HWND hWnd = nullptr;
-    libpico_mainwnd_native_handle(wnd, reinterpret_cast<void**>(&hWnd));
+    libnetorrent_mainwnd_native_handle(wnd, reinterpret_cast<void**>(&hWnd));
 
     wchar_t main[DEFAULT_I18N_BUFFER_SIZE];
     size_t main_len = DEFAULT_I18N_BUFFER_SIZE;
-    libpico_i18n("no_update_available", main, &main_len);
+    libnetorrent_i18n("no_update_available", main, &main_len);
 
     TASKDIALOGCONFIG tdf = { sizeof(TASKDIALOGCONFIG) };
     tdf.dwCommonButtons = TDCBF_OK_BUTTON;
@@ -112,29 +112,29 @@ void show_no_update(libpico_mainwnd_t* wnd)
     tdf.hwndParent = hWnd;
     tdf.pszMainIcon = TD_INFORMATION_ICON;
     tdf.pszMainInstruction = main;
-    tdf.pszWindowTitle = L"PicoTorrent";
+    tdf.pszWindowTitle = L"NeTorrent";
 
     TaskDialogIndirect(&tdf, nullptr, nullptr, nullptr);
 }
 
-libpico_result_t parse_response(
-    libpico_http_response_t* response,
-    libpico_http_status_t status,
-    libpico_param_t* user)
+libnetorrent_result_t parse_response(
+    libnetorrent_http_response_t* response,
+    libnetorrent_http_status_t status,
+    libnetorrent_param_t* user)
 {
     updater_request_data_t* data = reinterpret_cast<updater_request_data_t*>(user);
 
     switch (status)
     {
-    case libpico_http_ok:
+    case libnetorrent_http_ok:
     {
         size_t len;
-        libpico_http_response_body_len(response, &len);
+        libnetorrent_http_response_body_len(response, &len);
 
         if (len > 0)
         {
             std::string body(len, '\0');
-            libpico_http_response_body(response, body.data(), body.size());
+            libnetorrent_http_response_body(response, body.data(), body.size());
 
             const sajson::document& doc = sajson::parse(
                 sajson::dynamic_allocation(),
@@ -153,7 +153,7 @@ libpico_result_t parse_response(
             char ignoredVersion[100];
             size_t ignoredVersionLen = 100;
 
-            libpico_config_string_get(
+            libnetorrent_config_string_get(
                 data->config,
                 "update_checks.ignored_version",
                 ignoredVersion,
@@ -165,7 +165,7 @@ libpico_result_t parse_response(
             }
 
             semver::version parsedVersion(version);
-            semver::version currentVersion(libpico_version());
+            semver::version currentVersion(libnetorrent_version());
 
             if (parsedVersion > currentVersion)
             {
@@ -186,10 +186,10 @@ libpico_result_t parse_response(
     }
     }
 
-    return libpico_ok;
+    return libnetorrent_ok;
 }
 
-void make_request(libpico_config_t* config, libpico_mainwnd_t* wnd, bool force)
+void make_request(libnetorrent_config_t* config, libnetorrent_mainwnd_t* wnd, bool force)
 {
     updater_request_data_t* data = new updater_request_data_t();
     data->config = config;
@@ -199,65 +199,65 @@ void make_request(libpico_config_t* config, libpico_mainwnd_t* wnd, bool force)
     char url[255];
     size_t url_len = 255;
 
-    libpico_config_string_get(config, "update_checks.url", url, &url_len);
-    libpico_http_get(url, parse_response, reinterpret_cast<libpico_param_t*>(data));
+    libnetorrent_config_string_get(config, "update_checks.url", url, &url_len);
+    libnetorrent_http_get(url, parse_response, reinterpret_cast<libnetorrent_param_t*>(data));
 }
 
-libpico_result_t check(libpico_menuitem_t* item, libpico_param_t* param)
+libnetorrent_result_t check(libnetorrent_menuitem_t* item, libnetorrent_param_t* param)
 {
     updater_request_data_t* data = reinterpret_cast<updater_request_data_t*>(param);
     make_request(data->config, data->wnd, data->force);
-    return libpico_ok;
+    return libnetorrent_ok;
 }
 
-libpico_result_t on_events(
-    libpico_event_t event,
-    libpico_param_t* param,
-    libpico_param_t* user)
+libnetorrent_result_t on_events(
+    libnetorrent_event_t event,
+    libnetorrent_param_t* param,
+    libnetorrent_param_t* user)
 {
-    libpico_plugin_t* plugin = reinterpret_cast<libpico_plugin_t*>(user);
+    libnetorrent_plugin_t* plugin = reinterpret_cast<libnetorrent_plugin_t*>(user);
 
     switch (event)
     {
-    case libpico_event_mainwnd_created:
+    case libnetorrent_event_mainwnd_created:
     {
-        libpico_config_t* config = nullptr;
-        libpico_config_get(plugin, &config);
+        libnetorrent_config_t* config = nullptr;
+        libnetorrent_config_get(plugin, &config);
 
         bool enabled = false;
-        libpico_config_bool_get(config, "update_checks.enabled", &enabled);
+        libnetorrent_config_bool_get(config, "update_checks.enabled", &enabled);
 
         if (enabled)
         {
             make_request(
                 config,
-                reinterpret_cast<libpico_mainwnd_t*>(param),
+                reinterpret_cast<libnetorrent_mainwnd_t*>(param),
                 false);
         }
 
         // Insert item in about menu to force a check for update
-        libpico_menu_t* help;
-        libpico_menu_get(reinterpret_cast<libpico_mainwnd_t*>(param), libpico_menu_help, &help);
+        libnetorrent_menu_t* help;
+        libnetorrent_menu_get(reinterpret_cast<libnetorrent_mainwnd_t*>(param), libnetorrent_menu_help, &help);
 
         wchar_t check_for_update[DEFAULT_I18N_BUFFER_SIZE];
         size_t check_for_update_len = DEFAULT_I18N_BUFFER_SIZE;
-        libpico_i18n("amp_check_for_update", check_for_update, &check_for_update_len);
+        libnetorrent_i18n("amp_check_for_update", check_for_update, &check_for_update_len);
 
         updater_request_data_t* data = new updater_request_data_t();
         data->config = config;
         data->force = true;
-        data->wnd = reinterpret_cast<libpico_mainwnd_t*>(param);
+        data->wnd = reinterpret_cast<libnetorrent_mainwnd_t*>(param);
 
-        libpico_menu_insert_item(
+        libnetorrent_menu_insert_item(
             help,
             0,
             check_for_update,
             check_for_update_len,
             check,
-            reinterpret_cast<libpico_param_t*>(data),
+            reinterpret_cast<libnetorrent_param_t*>(data),
             nullptr);
 
-        libpico_menu_insert_separator(
+        libnetorrent_menu_insert_separator(
             help,
             1);
 
@@ -265,20 +265,20 @@ libpico_result_t on_events(
     }
     }
 
-    return libpico_ok;
+    return libnetorrent_ok;
 }
 
-libpico_result_t init_updater(int version, libpico_plugin_t* plugin)
+libnetorrent_result_t init_updater(int version, libnetorrent_plugin_t* plugin)
 {
-    if (version != LIBPICO_API_VERSION)
+    if (version != LIBNETORRENT_API_VERSION)
     {
-        return libpico_version_mismatch;
+        return libnetorrent_version_mismatch;
     }
 
-    return libpico_register_hook(plugin, on_events, reinterpret_cast<libpico_param_t*>(plugin));
+    return libnetorrent_register_hook(plugin, on_events, reinterpret_cast<libnetorrent_param_t*>(plugin));
 }
 
-LIBPICO_DEFINE_PLUGIN(
+LIBNETORRENT_DEFINE_PLUGIN(
     "updater",
     "1.0",
     init_updater);

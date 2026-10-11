@@ -1,6 +1,6 @@
-# PQL - the PicoTorrent Query Language
+# PQL - the NeTorrent Query Language
 
-PQL is a simple query language for filtering torrents in PicoTorrent.
+PQL is a simple query language for filtering torrents in NeTorrent.
 
 
 ## Building

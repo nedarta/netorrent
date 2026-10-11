@@ -60,7 +60,7 @@ target_include_directories(
 )
 
 add_library(
-    PicoTorrentPQL
+    NeTorrentPQL
     STATIC
     generated/QueryBaseVisitor
     generated/QueryLexer
@@ -69,19 +69,19 @@ add_library(
 )
 
 target_include_directories(
-    PicoTorrentPQL
+    NeTorrentPQL
     PUBLIC
     "../../vendor/antlr4/runtime/Cpp/runtime/src"
 )
 
 target_include_directories(
-    PicoTorrentPQL
+    NeTorrentPQL
     INTERFACE
     generated/
 )
 
 target_link_libraries(
-    PicoTorrentPQL
+    NeTorrentPQL
     PUBLIC
     antlr4
 )

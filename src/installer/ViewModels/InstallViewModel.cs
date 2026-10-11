@@ -1,13 +1,13 @@
 ﻿using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using PicoTorrentBootstrapper.Models;
-using PicoTorrentBootstrapper.Views;
+using NeTorrentBootstrapper.Models;
+using NeTorrentBootstrapper.Views;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace PicoTorrentBootstrapper.ViewModels
+namespace NeTorrentBootstrapper.ViewModels
 {
     public sealed class InstallViewModel : PropertyNotifyBase
     {
@@ -128,7 +128,7 @@ namespace PicoTorrentBootstrapper.ViewModels
 
             _bootstrapper.Engine.Log(LogLevel.Standard, $"Launching target: {formatted}");
 
-            PicoBA.View.Close();
+            NeBA.View.Close();
 
             Process.Start(formatted);
         }

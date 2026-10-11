@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace PicoTorrentBootstrapper.ViewModels
+namespace NeTorrentBootstrapper.ViewModels
 {
     public sealed class NewerViewModel : PropertyNotifyBase
     {

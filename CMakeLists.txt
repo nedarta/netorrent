@@ -6,7 +6,7 @@ cmake_policy(SET CMP0115 OLD) # Source file extensions must be explicit.
 set(VCPKG_OVERLAY_TRIPLETS ${CMAKE_CURRENT_SOURCE_DIR}/vendor/vcpkg-overlays/triplets)
 set(CMAKE_TOOLCHAIN_FILE   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/vcpkg/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg toolchain file")
 
-project("PicoTorrent")
+project("NeTorrent")
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -35,7 +35,7 @@ find_package(nlohmann_json       CONFIG REQUIRED)
 find_package(unofficial-sqlite3  CONFIG REQUIRED)
 
 # Generate buildinfo file
-configure_file("${CMAKE_SOURCE_DIR}/src/picotorrent/buildinfo.cpp.in" "${CMAKE_SOURCE_DIR}/src/picotorrent/buildinfo.cpp" @ONLY)
+configure_file("${CMAKE_SOURCE_DIR}/src/netorrent/buildinfo.cpp.in" "${CMAKE_SOURCE_DIR}/src/netorrent/buildinfo.cpp" @ONLY)
 
 # Debug flags
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi")
@@ -46,7 +46,7 @@ set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/DEBUG /INCREMENTAL:NO /MAP /OPT:REF /OPT:IC
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/DEBUG /INCREMENTAL:NO /MAP /OPT:REF /OPT:ICF")
 
 add_executable(
-    PicoTorrent-coredb
+    NeTorrent-coredb
     src/l10n/main
     lang/ca-ES.json
     lang/de-DE.json
@@ -75,95 +75,95 @@ add_executable(
 )
 
 target_link_libraries(
-    PicoTorrent-coredb
+    NeTorrent-coredb
     PRIVATE
     nlohmann_json::nlohmann_json
     unofficial::sqlite3::sqlite3
 )
 
 add_executable(
-    PicoTorrent
+    NeTorrent
     WIN32
 
-    src/picotorrent/application
-    src/picotorrent/buildinfo
-    src/picotorrent/crashpadinitializer
-    src/picotorrent/main
-    src/picotorrent/persistencemanager
-    src/picotorrent/resources.rc
+    src/netorrent/application
+    src/netorrent/buildinfo
+    src/netorrent/crashpadinitializer
+    src/netorrent/main
+    src/netorrent/persistencemanager
+    src/netorrent/resources.rc
 
     # API
-    src/picotorrent/api/libpico
+    src/netorrent/api/libnetorrent
 
     # BitTorrent
-    src/picotorrent/bittorrent/session
-    src/picotorrent/bittorrent/torrenthandle
+    src/netorrent/bittorrent/session
+    src/netorrent/bittorrent/torrenthandle
 
     # Core
-    src/picotorrent/core/configuration
-    src/picotorrent/core/database
-    src/picotorrent/core/environment
-    src/picotorrent/core/utils
+    src/netorrent/core/configuration
+    src/netorrent/core/database
+    src/netorrent/core/environment
+    src/netorrent/core/utils
 
     # Http
-    src/picotorrent/http/httpclient
+    src/netorrent/http/httpclient
 
     # IPC
-    src/picotorrent/ipc/applicationoptionsconnection
-    src/picotorrent/ipc/server
+    src/netorrent/ipc/applicationoptionsconnection
+    src/netorrent/ipc/server
 
     # Dialogs
-    src/picotorrent/ui/dialogs/aboutdialog
-    src/picotorrent/ui/dialogs/addmagnetlinkdialog
-    src/picotorrent/ui/dialogs/addtrackerdialog
-    src/picotorrent/ui/dialogs/addtorrentdialog
-    src/picotorrent/ui/dialogs/createtorrentdialog
-    src/picotorrent/ui/dialogs/listeninterfacedialog
-    src/picotorrent/ui/dialogs/preferencesadvancedpage
-    src/picotorrent/ui/dialogs/preferencesconnectionpage
-    src/picotorrent/ui/dialogs/preferencesdialog
-    src/picotorrent/ui/dialogs/preferencesdownloadspage
-    src/picotorrent/ui/dialogs/preferencesgeneralpage
-    src/picotorrent/ui/dialogs/preferenceslabelspage
-    src/picotorrent/ui/dialogs/preferencesproxypage
-    src/picotorrent/ui/dialogs/textoutputdialog
+    src/netorrent/ui/dialogs/aboutdialog
+    src/netorrent/ui/dialogs/addmagnetlinkdialog
+    src/netorrent/ui/dialogs/addtrackerdialog
+    src/netorrent/ui/dialogs/addtorrentdialog
+    src/netorrent/ui/dialogs/createtorrentdialog
+    src/netorrent/ui/dialogs/listeninterfacedialog
+    src/netorrent/ui/dialogs/preferencesadvancedpage
+    src/netorrent/ui/dialogs/preferencesconnectionpage
+    src/netorrent/ui/dialogs/preferencesdialog
+    src/netorrent/ui/dialogs/preferencesdownloadspage
+    src/netorrent/ui/dialogs/preferencesgeneralpage
+    src/netorrent/ui/dialogs/preferenceslabelspage
+    src/netorrent/ui/dialogs/preferencesproxypage
+    src/netorrent/ui/dialogs/textoutputdialog
 
     # Filters
-    src/picotorrent/ui/filters/pqltorrentfilter
+    src/netorrent/ui/filters/pqltorrentfilter
 
     # Models
-    src/picotorrent/ui/models/filestoragemodel
-    src/picotorrent/ui/models/peerlistmodel
-    src/picotorrent/ui/models/torrentlistmodel
-    src/picotorrent/ui/models/trackerlistmodel
+    src/netorrent/ui/models/filestoragemodel
+    src/netorrent/ui/models/peerlistmodel
+    src/netorrent/ui/models/torrentlistmodel
+    src/netorrent/ui/models/trackerlistmodel
 
     # Persistence
-    src/picotorrent/ui/persistence/persistenttorrentlistview
+    src/netorrent/ui/persistence/persistenttorrentlistview
 
     # UI
-    src/picotorrent/ui/console
-    src/picotorrent/ui/mainframe
-    src/picotorrent/ui/statusbar
-    src/picotorrent/ui/taskbaricon
-    src/picotorrent/ui/torrentcontextmenu
-    src/picotorrent/ui/torrentdetailsfilespanel
-    src/picotorrent/ui/torrentdetailsoverviewpanel
-    src/picotorrent/ui/torrentdetailspeerspanel
-    src/picotorrent/ui/torrentdetailstrackerspanel
-    src/picotorrent/ui/torrentdetailsview
-    src/picotorrent/ui/torrentfilelistview
-    src/picotorrent/ui/torrentlistview
-    src/picotorrent/ui/translator
+    src/netorrent/ui/console
+    src/netorrent/ui/mainframe
+    src/netorrent/ui/statusbar
+    src/netorrent/ui/taskbaricon
+    src/netorrent/ui/torrentcontextmenu
+    src/netorrent/ui/torrentdetailsfilespanel
+    src/netorrent/ui/torrentdetailsoverviewpanel
+    src/netorrent/ui/torrentdetailspeerspanel
+    src/netorrent/ui/torrentdetailstrackerspanel
+    src/netorrent/ui/torrentdetailsview
+    src/netorrent/ui/torrentfilelistview
+    src/netorrent/ui/torrentlistview
+    src/netorrent/ui/translator
 
     # Widgets
-    src/picotorrent/ui/widgets/pieceprogressbar
+    src/netorrent/ui/widgets/pieceprogressbar
 
     # Win32 specific stuff
-    src/picotorrent/ui/win32/openfiledialog
+    src/netorrent/ui/win32/openfiledialog
 )
 
 target_compile_definitions(
-    PicoTorrent
+    NeTorrent
     PRIVATE
     -D_UNICODE
     -D_WIN32
@@ -174,27 +174,27 @@ target_compile_definitions(
     -DWIN32
     -DWIN32_LEAN_AND_MEAN
 
-    -DLIBPICO_API_EXPORT
+    -DLIBNETORRENT_API_EXPORT
 
-    -DPICO_GIT_COMMITISH=${GITVERSION_VAR_SHORTSHA}
-    -DPICO_VERSION_MAJOR=${GITVERSION_VAR_VERSION_MAJOR}
-    -DPICO_VERSION_MINOR=${GITVERSION_VAR_VERSION_MINOR}
-    -DPICO_VERSION_PATCH=${GITVERSION_VAR_VERSION_PATCH}
+    -DNETORRENT_GIT_COMMITISH=${GITVERSION_VAR_SHORTSHA}
+    -DNETORRENT_VERSION_MAJOR=${GITVERSION_VAR_VERSION_MAJOR}
+    -DNETORRENT_VERSION_MINOR=${GITVERSION_VAR_VERSION_MINOR}
+    -DNETORRENT_VERSION_PATCH=${GITVERSION_VAR_VERSION_PATCH}
 
-    -DPICO_WX_GIT_COMMITISH=${PICO_WX_GIT_COMMITISH}
+    -DNETORRENT_WX_GIT_COMMITISH=${NETORRENT_WX_GIT_COMMITISH}
 )
 
-target_compile_options(PicoTorrent PRIVATE /guard:cf /W4 /WX)
+target_compile_options(NeTorrent PRIVATE /guard:cf /W4 /WX)
 
 target_include_directories(
-    PicoTorrent
+    NeTorrent
     PRIVATE
 
     include
 )
 
 target_link_libraries(
-    PicoTorrent
+    NeTorrent
 
     PRIVATE
 
@@ -230,12 +230,12 @@ target_link_libraries(
     LibtorrentRasterbar::torrent-rasterbar
 
     # PQL
-    PicoTorrentPQL
+    NeTorrentPQL
 
     unofficial::sqlite3::sqlite3
 )
 
-set_property(TARGET PicoTorrent PROPERTY ENABLE_EXPORTS 1)
+set_property(TARGET NeTorrent PROPERTY ENABLE_EXPORTS 1)
 
 # Plugins
 add_library(
@@ -246,18 +246,18 @@ add_library(
 
 target_compile_definitions(Plugin_Updater PRIVATE -D_WIN32 -DUNICODE -DWIN32_LEAN_AND_MEAN)
 target_include_directories(Plugin_Updater PRIVATE include)
-target_link_libraries(Plugin_Updater PRIVATE PicoTorrent Comctl32)
+target_link_libraries(Plugin_Updater PRIVATE NeTorrent Comctl32)
 
 # Copy Crashpad handler
 add_custom_command(
-    TARGET PicoTorrent POST_BUILD
+    TARGET NeTorrent POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:crashpad_handler>
-        $<TARGET_FILE_DIR:PicoTorrent>
+        $<TARGET_FILE_DIR:NeTorrent>
 )
 
 # Generate coredb
 add_custom_command(
-    TARGET PicoTorrent POST_BUILD
-    COMMAND PicoTorrent-coredb "${CMAKE_SOURCE_DIR}/lang" $<TARGET_FILE_DIR:PicoTorrent>
+    TARGET NeTorrent POST_BUILD
+    COMMAND NeTorrent-coredb "${CMAKE_SOURCE_DIR}/lang" $<TARGET_FILE_DIR:NeTorrent>
 )

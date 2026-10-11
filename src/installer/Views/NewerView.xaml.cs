@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PicoTorrentBootstrapper.Views
+namespace NeTorrentBootstrapper.Views
 {
     /// <summary>
     /// Interaction logic for NewerView.xaml

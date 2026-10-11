@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="PicoTorrentBootstrapper.Views.NewerView"
+﻿<UserControl x:Class="NeTorrentBootstrapper.Views.NewerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PicoTorrentBootstrapper.Views"
+             xmlns:local="clr-namespace:NeTorrentBootstrapper.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300">
     <Grid>
@@ -15,7 +15,7 @@
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,10,0">
             <TextBlock TextAlignment="Center" TextWrapping="Wrap">
                 Downgrading with the installer is not supported. Please manually uninstall
-                your current version of PicoTorrent and then restart this installer to continue.
+                your current version of NeTorrent and then restart this installer to continue.
             </TextBlock>
         </StackPanel>
 

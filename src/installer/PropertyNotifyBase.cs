@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace PicoTorrentBootstrapper
+namespace NeTorrentBootstrapper
 {
     public abstract class PropertyNotifyBase : INotifyPropertyChanged
     {

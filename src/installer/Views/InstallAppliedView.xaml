@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PicoTorrentBootstrapper.Views.InstallAppliedView"
+﻿<UserControl x:Class="NeTorrentBootstrapper.Views.InstallAppliedView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -28,7 +28,7 @@
                     </Hyperlink>
                 </TextBlock>
                 <TextBlock>
-                    <Hyperlink NavigateUri="https://github.com/picotorrent/picotorrent" TextDecorations="None" RequestNavigate="Hyperlink_RequestNavigate">
+                    <Hyperlink NavigateUri="https://github.com/netorrent/netorrent" TextDecorations="None" RequestNavigate="Hyperlink_RequestNavigate">
                         <Ellipse Width="48" Height="48" Margin="5">
                             <Ellipse.Fill>
                                 <ImageBrush ImageSource="../Resources/github.png" />

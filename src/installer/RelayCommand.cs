@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace PicoTorrentBootstrapper
+namespace NeTorrentBootstrapper
 {
     /// <summary>
     /// Base class that implements ICommand interface via delegates.

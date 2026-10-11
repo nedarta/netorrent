@@ -1,7 +1,7 @@
-PQL - The PicoTorrent Query Language
+PQL - The NeTorrent Query Language
 ====================================
 
-PicoTorrent ships with an embedded query language (called PQL) which makes it
+NeTorrent ships with an embedded query language (called PQL) which makes it
 possible to filter the torrent list view in order to quickly show relevant
 information.
 

@@ -4,16 +4,16 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: Microsoft.Tools.WindowsInstallerXml.Bootstrapper.BootstrapperApplication(typeof(PicoTorrentBootstrapper.PicoBA))]
+[assembly: Microsoft.Tools.WindowsInstallerXml.Bootstrapper.BootstrapperApplication(typeof(NeTorrentBootstrapper.NeBA))]
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PicoTorrentBootstrapper")]
+[assembly: AssemblyTitle("NeTorrentBootstrapper")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PicoTorrentBootstrapper")]
+[assembly: AssemblyProduct("NeTorrentBootstrapper")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

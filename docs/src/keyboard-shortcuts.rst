@@ -1,7 +1,7 @@
 Keyboard Shortcuts
 ==================
 
-PicoTorrent has a few keyboard shortcuts which simplifies various tasks.
+NeTorrent has a few keyboard shortcuts which simplifies various tasks.
 
 =================== =========================================================
 Shortcut            Action

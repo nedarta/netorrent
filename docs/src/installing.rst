@@ -1,7 +1,7 @@
 Installing
 ==========
 
-You should only install PicoTorrent from trusted sources. New releases are
+You should only install NeTorrent from trusted sources. New releases are
 published on GitHub and FossHub.
 
 

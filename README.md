@@ -1,6 +1,6 @@
-# PicoTorrent
+# NeTorrent
 
-![CI](https://github.com/picotorrent/picotorrent/workflows/CI/badge.svg)
+![CI](https://github.com/netorrent/netorrent/workflows/CI/badge.svg)
 [![Discord](https://img.shields.io/discord/759537913205227580)](https://discord.gg/tV3dFrv)
 
 A tiny, hackable BitTorrent client written in modern C++. Based on
@@ -15,22 +15,22 @@ Rasterbar-libtorrent to provide high performance and low memory usage.
 
 - Full support for BitTorrent 2.0 ([BEP-52](http://bittorrent.org/beps/bep_0052.html)), v1, v2 and v1+v2 hybrid torrents.
 - Supports DHT, PeX, LSD, UPnP.
-- (Azureus-style) peer ID: `-PI-`. Example: `-PI0151-` (major: 0, minor: 15, patch: 1).
-- User agent: `PicoTorrent/x.y.z`.
+- (Azureus-style) peer ID: `-NT-`. Example: `-NT0151-` (major: 0, minor: 15, patch: 1).
+- User agent: `NeTorrent/x.y.z`.
 - Native look-and-feel across Windows versions.
 - Easy to use with high performance.
 
-*The portable version of PicoTorrent requires manual installation of [the Microsoft Visual C++ Redistributable for Visual Studio 2019](https://visualstudio.microsoft.com/downloads/).*
+*The portable version of NeTorrent requires manual installation of [the Microsoft Visual C++ Redistributable for Visual Studio 2019](https://visualstudio.microsoft.com/downloads/).*
 
 
 ## Download for Windows
 
-[![Download zip](https://custom-icon-badges.demolab.com/badge/-Download-blue?style=for-the-badge&logo=download&logoColor=white "Download zip")](https://github.com/picotorrent/picotorrent/releases)
+[![Download zip](https://custom-icon-badges.demolab.com/badge/-Download-blue?style=for-the-badge&logo=download&logoColor=white "Download zip")](https://github.com/netorrent/netorrent/releases)
 
 
-## Building PicoTorrent
+## Building NeTorrent
 
-To successfully build PicoTorrent, you need the following libraries and
+To successfully build NeTorrent, you need the following libraries and
 applications installed,
 
  * [CMake (>= v3.14)](https://cmake.org/download/).
@@ -52,10 +52,10 @@ applications installed,
 
 ## Translations
 
-PicoTorrent uses [Weblate](https://translate.picotorrent.org/) to handle the translation process. If you want to help, feel free to signup and give your contribution.
+NeTorrent uses [Weblate](https://translate.netorrent.org/) to handle the translation process. If you want to help, feel free to signup and give your contribution.
 
 
 ## License
 
-Copyright (c) Viktor Elofsson and contributors. PicoTorrent is provided
+Copyright (c) Viktor Elofsson and contributors. NeTorrent is provided
 as-is under the MIT license. For more information see [LICENSE](LICENSE).

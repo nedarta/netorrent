@@ -2,7 +2,7 @@
 using System.Windows.Documents;
 using System.Windows.Navigation;
 
-namespace PicoTorrentBootstrapper.Views
+namespace NeTorrentBootstrapper.Views
 {
     /// <summary>
     /// Interaction logic for InstallAppliedView.xaml
@@ -17,7 +17,7 @@ namespace PicoTorrentBootstrapper.Views
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             var link = sender as Hyperlink;
-            PicoBA.LaunchProcess(link.NavigateUri.ToString());
+            NeBA.LaunchProcess(link.NavigateUri.ToString());
         }
     }
 }
