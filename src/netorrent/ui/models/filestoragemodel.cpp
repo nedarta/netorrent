@@ -138,7 +138,7 @@ void FileStorageModel::RebuildTree(std::shared_ptr<const lt::torrent_info> ti)
 
         auto n = std::make_shared<Node>();
         n->index = idx;
-        n->name = files.file_name(idx).to_string();
+        n->name = std::string(files.file_name(idx));
         n->parent = currentNode;
         n->priority = lt::default_priority;
         n->size = files.file_size(idx);

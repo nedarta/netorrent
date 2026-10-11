@@ -167,7 +167,11 @@ target_compile_definitions(
     PRIVATE
     -D_UNICODE
     -D_WIN32
-    -D_WIN32_WINNT=0x0600
+    # Boost.Log derives its ABI namespace from _WIN32_WINNT (>= Win8 => v2s_mt_nt62).
+    # Our dependencies are built against the current SDK, so target Windows 10 to
+    # match; 0x0600 (Vista) produced a different namespace and broke linking.
+    -D_WIN32_WINNT=0x0A00
+    -DNTDDI_VERSION=0x0A000000
     -DNOMINMAX
     -DPICOJSON_USE_INT64
     -DUNICODE
@@ -184,7 +188,15 @@ target_compile_definitions(
     -DNETORRENT_WX_GIT_COMMITISH=${NETORRENT_WX_GIT_COMMITISH}
 )
 
-target_compile_options(NeTorrent PRIVATE /guard:cf /W4 /WX)
+target_compile_options(
+    NeTorrent
+    PRIVATE
+    /guard:cf /W4 /WX
+    # We build libtorrent with its deprecated API enabled (vcpkg 'deprfun' feature)
+    # on purpose for now, which makes every deprecated symbol emit C4996. /WX would
+    # turn those into build errors, so silence C4996 until the 2.1 port lands.
+    /wd4996
+)
 
 target_include_directories(
     NeTorrent
