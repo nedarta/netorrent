@@ -43,7 +43,7 @@
     "netorrent_v_format": "NeTorrent {0}",
     "build_info_format": "Šaka: {0}\nSHA1: {1}",
     "netorrent_description": "Sukurta su meile, panaudojus „Boost“, „Rasterbar-libtorrent“ ir „OpenSSL“ bibliotekas.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">„NeTorrent“ „GitHub“ platformoje</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">„NeTorrent“ „GitHub“ platformoje</a>",
     "downloads": "Siuntiniai",
     "transfers": "Siuntiniai",
     "path": "Vieta",

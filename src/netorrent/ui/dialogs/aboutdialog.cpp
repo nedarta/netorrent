@@ -84,7 +84,7 @@ AboutDialog::AboutDialog(wxWindow* parent, wxWindowID id)
     auto footerSizer = new wxBoxSizer(wxHORIZONTAL);
     footerSizer->Add(new wxStaticText(this, wxID_ANY, i18n("copyright_text")));
     footerSizer->AddStretchSpacer();
-    footerSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, "https://netorrent.org", "https://netorrent.org?app"));
+    footerSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, "https://github.com/nedarta/netorrent", "https://github.com/nedarta/netorrent?app"));
 
     auto border = FromDIP(11);
     auto sizer = new wxBoxSizer(wxVERTICAL);

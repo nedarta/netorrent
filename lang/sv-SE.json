@@ -43,7 +43,7 @@
     "about_netorrent": "Om NeTorrent",
     "netorrent_v_format": "NeTorrent v{0}",
     "netorrent_description": "Byggt med kärlek, ovanpå Boost, Rasterbar-libtorrent och OpenSSL.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent på GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent på GitHub</a>",
     "downloads": "Nedladdningar",
     "transfers": "Överföringar",
     "path": "Sökväg",

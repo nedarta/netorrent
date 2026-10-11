@@ -36,7 +36,7 @@
     <Bundle Name="NeTorrent"
             Manufacturer="NeTorrent contributors."
             IconSourceFile="res/app.ico"
-            AboutUrl="https://netorrent.org"
+            AboutUrl="https://github.com/nedarta/netorrent"
             UpgradeCode="$(var.UpgradeCode)"
             Version="$(var.Version)">
 

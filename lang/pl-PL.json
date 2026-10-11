@@ -40,7 +40,7 @@
     "about_netorrent": "O NeTorrent",
     "build_info_format": "Gałąź: {0}\nSHA1: {1}",
     "netorrent_description": "Wykonane za pomocą Boost, Rasterbar-libtorrent, OpenSSL i wxWidgets. i 💗",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent na GitHubie</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent na GitHubie</a>",
     "downloads": "Pobrane",
     "transfers": "Transfery",
     "path": "Ścieżka",

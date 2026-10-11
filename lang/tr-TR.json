@@ -34,7 +34,7 @@
     "storage": "Disk",
     "about_netorrent": "NeTorrent Hakkında",
     "netorrent_description": "Boost, libtorrent ve OpenSSL kullanılarak aşkla oluşturulmuştur.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">GitHub üzerinde NeTorrent</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">GitHub üzerinde NeTorrent</a>",
     "downloads": "İndirmeler",
     "transfers": "Transferler",
     "path": "Yol",

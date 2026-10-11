@@ -37,7 +37,7 @@
     "storage": "Almacenamiento",
     "about_netorrent": "Acerca de NeTorrent",
     "netorrent_description": "Construido con amor, usando Boost, Rasterbar-libtorrent, OpenSSL y wxWidgets.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent en GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent en GitHub</a>",
     "downloads": "Descargas",
     "transfers": "Transferencias",
     "path": "Ruta",

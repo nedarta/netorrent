@@ -40,7 +40,7 @@
     "about_netorrent": "NeTorrent névjegy",
     "build_info_format": "Info: {0}\nSHA1: {1}",
     "netorrent_description": "Szeretettel készült. Boost, Rasterbar-libtorrent, és OpenSSL segítségével.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent a GitHub-on</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent a GitHub-on</a>",
     "downloads": "Letöltés",
     "transfers": "Átvitel",
     "path": "Hely",

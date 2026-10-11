@@ -39,7 +39,7 @@
     "storage": "Պահեստ",
     "about_netorrent": "NeTorrent-ի մասին",
     "netorrent_description": "Ստեղծվել է սիրով, օգտագործելով Boost, Rasterbar-libtorrent և OpenSSL.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent-ը GitHub-ում</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent-ը GitHub-ում</a>",
     "downloads": "Ներբեռնումները",
     "transfers": "Տեղափոխումները",
     "path": "Ուղին",

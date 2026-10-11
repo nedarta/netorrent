@@ -44,7 +44,7 @@
     "netorrent_v_format": "NeTorrent v{0}",
     "build_info_format": "Гілка: {0}\nSHA1: {1}",
     "netorrent_description": "Створено з любовʼю, використанням Boost, Rasterbar-libtorrent, OpenSSL та wxWidgets.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent на GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent на GitHub</a>",
     "downloads": "Завантаження",
     "transfers": "Передачі",
     "path": "Шлях",

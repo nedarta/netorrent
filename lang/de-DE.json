@@ -32,7 +32,7 @@
     "storage": "Speicher",
     "about_netorrent": "Über NeTorrent",
     "netorrent_description": "Gebaut mit Boost, Rasterbar-libtorrent, OpenSSL, wxWidgets und 💗",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent auf GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent auf GitHub</a>",
     "transfers": "Übertragungen",
     "path": "Pfad",
     "prompt_for_save_path": "Speicherpfad abfragen",

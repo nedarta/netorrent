@@ -1,6 +1,6 @@
 # NeTorrent
 
-![CI](https://github.com/netorrent/netorrent/workflows/CI/badge.svg)
+![CI](https://github.com/nedarta/netorrent/workflows/CI/badge.svg)
 [![Discord](https://img.shields.io/discord/759537913205227580)](https://discord.gg/tV3dFrv)
 
 A tiny, hackable BitTorrent client written in modern C++. Based on
@@ -25,7 +25,7 @@ Rasterbar-libtorrent to provide high performance and low memory usage.
 
 ## Download for Windows
 
-[![Download zip](https://custom-icon-badges.demolab.com/badge/-Download-blue?style=for-the-badge&logo=download&logoColor=white "Download zip")](https://github.com/netorrent/netorrent/releases)
+[![Download zip](https://custom-icon-badges.demolab.com/badge/-Download-blue?style=for-the-badge&logo=download&logoColor=white "Download zip")](https://github.com/nedarta/netorrent/releases)
 
 
 ## Building NeTorrent
@@ -69,7 +69,10 @@ and symbols zips):
 
 ## Translations
 
-NeTorrent uses [Weblate](https://translate.netorrent.org/) to handle the translation process. If you want to help, feel free to signup and give your contribution.
+## Translations
+
+Translation files live in `lang/`. Community translations are very welcome —
+open a pull request against the repository to add or improve a language.
 
 
 ## License

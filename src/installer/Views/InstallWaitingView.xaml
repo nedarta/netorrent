@@ -40,7 +40,7 @@
                     <CheckBox Margin="5" VerticalContentAlignment="Center" IsChecked="{Binding ShouldDownloadDependencies}">Download missing dependencies</CheckBox>
 
                     <TextBlock Grid.Column="1" FontSize="11" Margin="5" VerticalAlignment="Center">
-                        <Hyperlink NavigateUri="https://docs.netorrent.org/en/master/installing.html#download-missing-dependencies" RequestNavigate="Hyperlink_RequestNavigate">What's this?</Hyperlink>
+                        <Hyperlink NavigateUri="https://github.com/nedarta/netorrent" RequestNavigate="Hyperlink_RequestNavigate">What's this?</Hyperlink>
                     </TextBlock>
                 </Grid>
             </StackPanel>

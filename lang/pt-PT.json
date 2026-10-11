@@ -40,7 +40,7 @@
     "about_netorrent": "Sobre NeTorrent",
     "netorrent_v_format": "NeTorrent v{0}",
     "build_info_format": "Branch: {0}\nSHA1: {1}",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent no GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent no GitHub</a>",
     "downloads": "Downloads",
     "transfers": "Transferências",
     "path": "Caminho",

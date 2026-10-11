@@ -53,7 +53,7 @@ PreferencesDialog::PreferencesDialog(wxWindow* parent, std::shared_ptr<pt::Core:
     m_mainSizer->Add(m_book, 1, wxEXPAND);
 
     auto buttonSizer = new wxBoxSizer(wxHORIZONTAL);
-    buttonSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, i18n("documentation"), "https://docs.netorrent.org/en/master/configuration.html"), 0, wxALIGN_CENTER_VERTICAL);
+    buttonSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, i18n("documentation"), "https://github.com/nedarta/netorrent"), 0, wxALIGN_CENTER_VERTICAL);
     buttonSizer->AddStretchSpacer(1);
     buttonSizer->Add(new wxButton(this, ptID_BTN_RESTORE_DEFAULTS, i18n("restore_defaults")), 0, wxRIGHT, FromDIP(7));
     buttonSizer->Add(new wxButton(this, wxID_OK, i18n("ok")), 0, wxRIGHT, FromDIP(7));

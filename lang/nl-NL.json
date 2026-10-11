@@ -34,7 +34,7 @@
     "storage": "Opslag",
     "about_netorrent": "Over NeTorrent",
     "netorrent_description": "Gemaakt met Boost, Rasterbar-libtorrent, OpenSSL, wxWidgets en 💗",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent op GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent op GitHub</a>",
     "transfers": "Overdrachten",
     "path": "Pad",
     "prompt_for_save_path": "Vraag om opslagpad",

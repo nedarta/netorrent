@@ -44,7 +44,7 @@
     "netorrent_v_format": "NeTorrent v{0}",
     "build_info_format": "Branche : {0}\nSHA1 : {1}",
     "netorrent_description": "Compilé avec Boost, Rasterbar-libtorrent, OpenSSL, wxWidgets et 💗",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent sur GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent sur GitHub</a>",
     "downloads": "Téléchargements",
     "transfers": "Transferts",
     "path": "Chemin",

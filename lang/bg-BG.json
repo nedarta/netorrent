@@ -201,7 +201,7 @@
     "low": "Нисък",
     "unknown_size": "Неизвестен размер",
     "about_netorrent": "Относно NeTorrent",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent в GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent в GitHub</a>",
     "the_transfers_path_cannot_be_empty": "Пътят не трябва да е празен.",
     "invalid_listen_port": "Недействителен порт. Трябва да бъде число между 1024 и 65535.",
     "max_connections": "Макс. връзки",

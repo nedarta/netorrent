@@ -155,7 +155,7 @@ CreateTorrentDialog::CreateTorrentDialog(wxWindow* parent, wxWindowID id, std::s
     m_create->Disable();
     m_create->SetDefault();
 
-    buttonsSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, i18n("how_to_create_torrents"), "https://docs.netorrent.org/en/master/creating-torrents.html"), 0, wxALIGN_CENTER_VERTICAL);
+    buttonsSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, i18n("how_to_create_torrents"), "https://github.com/nedarta/netorrent"), 0, wxALIGN_CENTER_VERTICAL);
     buttonsSizer->AddStretchSpacer();
     buttonsSizer->Add(m_create);
     buttonsSizer->AddSpacer(FromDIP(7));

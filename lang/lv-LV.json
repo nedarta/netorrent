@@ -36,7 +36,7 @@
     "about_netorrent": "Par NeTorrent",
     "build_info_format": "Zars: {0}\nSHA1: {1}",
     "netorrent_description": "Kompilēts ar mīlestību, izmantojot Boost, Rasterbar-libtorrent un OpenSSL.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent iekš GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent iekš GitHub</a>",
     "downloads": "Lejupielādes",
     "transfers": "Faili",
     "path": "Mape",

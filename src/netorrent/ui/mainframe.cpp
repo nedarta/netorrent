@@ -739,7 +739,7 @@ void MainFrame::OnFileCreateTorrent(wxCommandEvent&)
 
 void MainFrame::OnViewHelp(wxCommandEvent&)
 {
-    wxLaunchDefaultBrowser("https://docs.netorrent.org");
+    wxLaunchDefaultBrowser("https://github.com/nedarta/netorrent");
 }
 
 void MainFrame::OnHelpAbout(wxCommandEvent&)

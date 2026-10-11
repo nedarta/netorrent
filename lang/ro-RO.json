@@ -36,7 +36,7 @@
     "storage": "Depozitare",
     "about_netorrent": "Despre NeTorrent",
     "netorrent_description": "Construit cu dragoste, folosind Boost, Rasterbar-libtorrent și OpenSSL.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent pe GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent pe GitHub</a>",
     "downloads": "Descărcări",
     "transfers": "Transferuri",
     "path": "Rută",

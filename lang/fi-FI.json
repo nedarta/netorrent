@@ -41,7 +41,7 @@
     "about_netorrent": "Tietoja NeTorrentista",
     "build_info_format": "Haara: {0}\nSHA1: {1}",
     "netorrent_description": "Tehty rakkaudella käyttäen Boostia, Rasterbar-libtorrenttia ja OpenSSL:ää.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">Näytä GitHubissa</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">Näytä GitHubissa</a>",
     "downloads": "Lataukset",
     "transfers": "Siirrot",
     "path": "Polku",

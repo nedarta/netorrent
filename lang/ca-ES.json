@@ -37,7 +37,7 @@
     "about_netorrent": "Sobre NeTorrent",
     "build_info_format": "Branca: {0}\nSHA1: {1}",
     "netorrent_description": "Creat amb amor, fent servir Boost, Rasterbar-libtorrent i OpenSSL.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent a GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent a GitHub</a>",
     "downloads": "Descarregues",
     "transfers": "Transferències",
     "path": "Ruta",

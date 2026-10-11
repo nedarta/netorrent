@@ -38,7 +38,7 @@
     "storage": "Αποθήκευση",
     "about_netorrent": "Περί NeTorrent",
     "netorrent_description": "Δημιουργήθηκε με αγάπη, χρησιμοποιώντας τα Boost, Rasterbar-libtorrent και OpenSSL.",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">NeTorrent στο GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">NeTorrent στο GitHub</a>",
     "downloads": "Μεταφορτώσεις",
     "transfers": "Μεταφορές",
     "path": "Διαδρομή",

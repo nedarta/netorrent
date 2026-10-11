@@ -51,7 +51,7 @@
     "the_transfers_path_cannot_be_empty": "مكان التحويلات غير فارغ.",
     "amp_file": "&ملف",
     "build_info_format": "الفرع: {0}\nSHA1: {1}",
-    "github_link": "<a href=\"https://github.com/netorrent/netorrent\">بيكوتورنت على GitHub</a>",
+    "github_link": "<a href=\"https://github.com/nedarta/netorrent\">بيكوتورنت على GitHub</a>",
     "none": "لاشيء",
     "http": "HTTP",
     "http_with_credentials": "HTTP (بإعتماد)",
