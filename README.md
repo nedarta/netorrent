@@ -30,23 +30,40 @@ Rasterbar-libtorrent to provide high performance and low memory usage.
 
 ## Building NeTorrent
 
-To successfully build NeTorrent, you need the following libraries and
-applications installed,
+NeTorrent is a Windows application built with CMake and vcpkg. You need:
 
- * [CMake (>= v3.14)](https://cmake.org/download/).
- * [Visual Studio 2019 Build Tools](https://visualstudio.microsoft.com/downloads/) (or regular Visual Studio 2019) with the C++ toolset.
- * [OpenSSL v1.1.1](https://slproweb.com/products/Win32OpenSSL.html) (*not*
-   the light version) for the architecture you plan on building. Both Win32
-   and Win64 can be installed side by side.
- * [Boost 1.73.0](https://www.boost.org).
- * [Chocolatey](https://chocolatey.org/install) (Optional) if you plan to build
-   or test the Chocolatey package.
- * [.NET Core](https://dotnet.microsoft.com/download). Used for the build scripts.
+ * [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) (or the
+   **Build Tools**) with the *Desktop development with C++* workload.
+ * [CMake](https://cmake.org/download/) — the copy bundled with Visual Studio is
+   used automatically if it is not on `PATH`.
+ * Git, for version stamping and the vendored submodules.
+
+OpenSSL, Boost, libtorrent, fmt, nlohmann-json and SQLite are pulled in by
+[vcpkg](https://vcpkg.io/) using the manifest in `vcpkg.json` — no manual
+installation is required.
+
+```powershell
+# One-time: fetch the vendored dependencies (vcpkg, wxWidgets, crashpad, antlr4)
+git submodule update --init --recursive
+
+# Configure + build (defaults to x64 Release)
+./scripts/build.ps1
+
+# Other configurations
+./scripts/build.ps1 -Arch x86 -Configuration Debug
+./scripts/build.ps1 -Target NeTorrent
+```
+
+The resulting binary is written to `build-<arch>/<Configuration>/`.
+
+### Legacy build (Cake)
+
+The original Cake pipeline is still present for packaging (installer, portable
+and symbols zips):
 
 ```
-λ git submodule update --init --recursive
 λ dotnet tool restore
-λ dotnet cake --platorm=[x86|x64] --configuration=[Debug|Release]
+λ dotnet cake --platform=[x86|x64] --configuration=[Debug|Release]
 ```
 
 
