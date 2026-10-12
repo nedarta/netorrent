@@ -59,6 +59,21 @@ at `picotorrent/picotorrent`; `origin` is where the NeTorrent repo will live.
 Out of scope for the MVP (later): PQL, labels, RSS, torrent creation wizard,
 plugin API/updater, translations beyond en-US, installer packaging.
 
+## Ported upstream PRs
+
+Open PRs from `picotorrent/picotorrent` that were never merged upstream, ported
+into NeTorrent (rebranded, and where needed adjusted for the modernized stack):
+
+- **#1287** more advanced libtorrent settings (`announce_ip`,
+  `rate_limit_ip_overhead`, uTP/TCP toggles, `dht_privacy_lookups`).
+- **#1246 / #1203 / #1251** translations — cs-CZ fix, vi-VN Weblate update,
+  new Azerbaijani (`az-AZ`).
+- **#1264** use vcpkg's wxWidgets instead of the `vendor/wx` submodule.
+
+Deliberately not ported: #1002 / #1243 (Linux), #1125 (client/server split —
+too large/WIP), #1225 (libtorrent bump — already superseded), #1010 (AppX
+packaging), #931 (RSS monitor — upstream PR is an incomplete stub).
+
 ## Layout
 
 ```

@@ -133,9 +133,18 @@ Write-Host "==> Version $version ($branch @ $shortSha)"
 New-Item -ItemType Directory -Force -Path $BuildDir | Out-Null
 $configureLog = Join-Path $BuildDir 'configure.log'
 Write-Host "==> Configuring CMake (log: $configureLog)"
+
+# Our dependency triplet builds Release only (VCPKG_BUILD_TYPE release). The VS
+# generator still emits Debug/RelWithDebInfo configs by default and CMake then
+# validates include dirs that only exist for Debug (e.g. wxWidgets' lib/mswud).
+# Restrict the generated configurations to match the triplet.
+$configTypes = @()
+if ($Triplet -match '-rel$') { $configTypes = @("-DCMAKE_CONFIGURATION_TYPES=$Configuration") }
+
 & $cmake -S $Root -B $BuildDir -G $VsGenerator -A $Platform `
     "-DVCPKG_TARGET_TRIPLET=$Triplet" `
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" `
+    @configTypes `
     "-DGITVERSION_VAR_BRANCHNAME=$branch" `
     "-DGITVERSION_VAR_SEMVER=$semver" `
     "-DGITVERSION_VAR_SHORTSHA=$shortSha" `
