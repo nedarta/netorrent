@@ -110,17 +110,6 @@ if (-not (Test-Path $vcpkgExe)) {
     if ($LASTEXITCODE -ne 0) { throw "vcpkg bootstrap failed" }
 }
 
-# --- Vendored nested dependencies --------------------------------------------
-# wxWidgets keeps its third-party libs (zlib, png, expat, tiff, jpeg, scintilla...)
-# in nested submodules. A shallow top-level fetch can leave them empty, which
-# shows up later as "No SOURCES given to target: wxzlib".
-$wxZlibSource = Join-Path $Root 'vendor/wx/src/zlib/adler32.c'
-if (-not (Test-Path $wxZlibSource)) {
-    Write-Host "==> Initializing wxWidgets nested submodules"
-    & git -C (Join-Path $Root 'vendor/wx') submodule update --init --recursive --depth 1
-    if ($LASTEXITCODE -ne 0) { throw "failed to initialize wxWidgets submodules" }
-}
-
 # --- Version information -----------------------------------------------------
 function Get-BuildVersion {
     param([string]$Override)

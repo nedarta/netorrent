@@ -15,19 +15,18 @@ option(WITH_STATIC_CRT "" Off)
 # -----------------------
 
 # --------- wx options
-set(wxBUILD_SHARED        OFF   CACHE BOOL   "" FORCE)
-set(wxBUILD_COMPATIBILITY "3.2" CACHE STRING "" FORCE)
-set(wxUSE_EXCEPTIONS      OFF   CACHE BOOL   "" FORCE)
+# wxWidgets now comes from vcpkg (see vcpkg.json) rather than the vendored
+# submodule, so the submodule-only build knobs (wxBUILD_*, wxUSE_*) are gone.
 # --------------------
 
 # vendor libs
 add_subdirectory(vendor/sentry-crashpad)
-add_subdirectory(vendor/wx)
 
-# pico components
+# components
 add_subdirectory(src/pql)
 
 # vcpkg packages
+find_package(wxWidgets              CONFIG REQUIRED)
 find_package(Boost                      REQUIRED COMPONENTS log)
 find_package(fmt                 CONFIG REQUIRED)
 find_package(LibtorrentRasterbar CONFIG REQUIRED)
@@ -215,7 +214,7 @@ target_link_libraries(
     Boost::log
 
     # wxWidgets
-    wxcore wxbase wxpropgrid
+    wx::core wx::base wx::propgrid
 
     # Windows
     Comctl32

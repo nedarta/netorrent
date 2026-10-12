@@ -8,6 +8,7 @@
     "fmt",
     { "name": "libtorrent", "features": ["deprfun"] },
     "nlohmann-json",
-    "sqlite3"
+    "sqlite3",
+    "wxwidgets"
   ]
 }
