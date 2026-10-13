@@ -1,26 +1,50 @@
 # NeTorrent
 
 ![CI](https://github.com/nedarta/netorrent/workflows/CI/badge.svg)
-[![Discord](https://img.shields.io/discord/759537913205227580)](https://discord.gg/tV3dFrv)
 
-A tiny, hackable BitTorrent client written in modern C++. Based on
-Rasterbar-libtorrent to provide high performance and low memory usage.
+A tiny, hackable BitTorrent client for Windows, written in modern C++ on top of
+[Rasterbar-libtorrent](https://libtorrent.org) for high performance and low
+memory usage.
+
+NeTorrent is a maintained fork of
+[PicoTorrent](https://github.com/picotorrent/picotorrent) — the last upstream
+release was **v0.25.0 (May 2021)** — kept building against current toolchains
+and actively developed.
 
 <p align="center">
     <img src="res/screenshot1.png?raw=true" width="614" />
 </p>
 
 
+## Status
+
+NeTorrent is a working, daily-usable client. It carries PicoTorrent's feature
+set and adds maintenance and features. Highlights since the fork:
+
+- **Ported to libtorrent 2.1** using the current API (the deprecated-API shim
+  PicoTorrent needed is gone).
+- **wxWidgets now comes from [vcpkg](https://vcpkg.io/)** (3.3.x) instead of a
+  vendored submodule.
+- Builds with **Visual Studio 2022 + CMake + vcpkg** (Boost 1.92, OpenSSL 3.6,
+  SQLite, fmt, nlohmann-json).
+- **RSS feed monitoring** — watch one or more feeds and automatically add
+  torrents whose titles match each feed's include/exclude filters.
+- **Downloaded / Uploaded** columns in the torrent list.
+- Fixed a startup crash in the advanced libtorrent settings.
+- New Azerbaijani translation; updated Czech and Vietnamese translations.
+
+
 ## Quick facts
 
 - Full support for BitTorrent 2.0 ([BEP-52](http://bittorrent.org/beps/bep_0052.html)), v1, v2 and v1+v2 hybrid torrents.
 - Supports DHT, PeX, LSD, UPnP.
+- RSS feed monitoring with include/exclude filters.
 - (Azureus-style) peer ID: `-NT-`. Example: `-NT0151-` (major: 0, minor: 15, patch: 1).
 - User agent: `NeTorrent/x.y.z`.
-- Native look-and-feel across Windows versions.
+- Native look-and-feel on Windows.
 - Easy to use with high performance.
 
-*The portable version of NeTorrent requires manual installation of [the Microsoft Visual C++ Redistributable for Visual Studio 2019](https://visualstudio.microsoft.com/downloads/).*
+*The portable build requires the Microsoft Visual C++ Redistributable.*
 
 
 ## Download for Windows
@@ -38,12 +62,12 @@ NeTorrent is a Windows application built with CMake and vcpkg. You need:
    used automatically if it is not on `PATH`.
  * Git, for version stamping and the vendored submodules.
 
-OpenSSL, Boost, libtorrent, fmt, nlohmann-json and SQLite are pulled in by
-[vcpkg](https://vcpkg.io/) using the manifest in `vcpkg.json` — no manual
+OpenSSL, Boost, libtorrent, fmt, nlohmann-json, SQLite and wxWidgets are pulled
+in by [vcpkg](https://vcpkg.io/) using the manifest in `vcpkg.json` — no manual
 installation is required.
 
 ```powershell
-# One-time: fetch the vendored dependencies (vcpkg, wxWidgets, crashpad, antlr4)
+# One-time: fetch the vendored dependencies (vcpkg, crashpad, antlr4)
 git submodule update --init --recursive
 
 # Configure + build (defaults to x64 Release)
@@ -69,13 +93,21 @@ and symbols zips):
 
 ## Translations
 
-## Translations
-
 Translation files live in `lang/`. Community translations are very welcome —
-open a pull request against the repository to add or improve a language.
+open a pull request against the repository to add or improve a language. Missing
+keys fall back to `en-US`.
+
+
+## Credits
+
+NeTorrent is a fork of [PicoTorrent](https://github.com/picotorrent/picotorrent)
+by Viktor Elofsson and contributors. The upstream history is preserved, and
+`upstream` points at the original repository for reference.
 
 
 ## License
 
-Copyright (c) Viktor Elofsson and contributors. NeTorrent is provided
-as-is under the MIT license. For more information see [LICENSE](LICENSE).
+Copyright (c) Viktor Elofsson and PicoTorrent contributors.
+
+NeTorrent changes copyright (c) the NeTorrent contributors. NeTorrent is
+provided as-is under the MIT license. For more information see [LICENSE](LICENSE).

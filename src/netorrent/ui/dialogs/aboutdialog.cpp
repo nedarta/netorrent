@@ -58,13 +58,17 @@ AboutDialog::AboutDialog(wxWindow* parent, wxWindowID id)
     lv->SetItem(lv->GetItemCount() - 1, 1, nljson.str());
     lv->SetItem(lv->GetItemCount() - 1, 2, "-");
 
-    lv->InsertItem(lv->GetItemCount(), OPENSSL_VERSION_TEXT);
-    lv->SetItem(lv->GetItemCount() - 1, 1, "-");
+    lv->InsertItem(lv->GetItemCount(), "OpenSSL");
+    lv->SetItem(lv->GetItemCount() - 1, 1, OPENSSL_VERSION_TEXT);
     lv->SetItem(lv->GetItemCount() - 1, 2, "-");
 
     lv->InsertItem(lv->GetItemCount(), "NeTorrent");
     lv->SetItem(lv->GetItemCount() - 1, 1, BuildInfo::semver());
     lv->SetItem(lv->GetItemCount() - 1, 2, BuildInfo::commitish());
+
+    lv->InsertItem(lv->GetItemCount(), "PicoTorrent (upstream base)");
+    lv->SetItem(lv->GetItemCount() - 1, 1, "0.25.0");
+    lv->SetItem(lv->GetItemCount() - 1, 2, "-");
 
     lv->InsertItem(lv->GetItemCount(), "Rasterbar-libtorrent");
     lv->SetItem(lv->GetItemCount() - 1, 1, LIBTORRENT_VERSION);
