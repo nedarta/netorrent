@@ -47,6 +47,8 @@ namespace pt::UI::Models
             AddedOn,
             CompletedOn,
             Label,
+            Downloaded,
+            Uploaded,
             _Max
         };
 

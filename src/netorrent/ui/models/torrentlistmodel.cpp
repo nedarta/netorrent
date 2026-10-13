@@ -228,6 +228,20 @@ int TorrentListModel::Compare(const wxDataViewItem& item1, const wxDataViewItem&
         if (lhs.labelName == rhs.labelName) { return nameSort(ascending, lhs, rhs); }
         break;
     }
+    case Columns::Downloaded:
+    {
+        if (lhs.allTimeDownload < rhs.allTimeDownload) { return ascending ? -1 : 1; }
+        if (lhs.allTimeDownload > rhs.allTimeDownload) { return ascending ? 1 : -1; }
+        if (lhs.allTimeDownload == rhs.allTimeDownload) { return hashSort(ascending, lhs, rhs); }
+        break;
+    }
+    case Columns::Uploaded:
+    {
+        if (lhs.allTimeUpload < rhs.allTimeUpload) { return ascending ? -1 : 1; }
+        if (lhs.allTimeUpload > rhs.allTimeUpload) { return ascending ? 1 : -1; }
+        if (lhs.allTimeUpload == rhs.allTimeUpload) { return hashSort(ascending, lhs, rhs); }
+        break;
+    }
     }
 
     return 0;
@@ -544,6 +558,16 @@ void TorrentListModel::GetValueByRow(wxVariant& variant, uint32_t row, uint32_t 
         variant << wxDataViewIconText(
             Utils::toStdWString(name), ic);
 
+        break;
+    }
+    case Columns::Downloaded:
+    {
+        variant = Utils::toHumanFileSize(status.allTimeDownload);
+        break;
+    }
+    case Columns::Uploaded:
+    {
+        variant = Utils::toHumanFileSize(status.allTimeUpload);
         break;
     }
     }
