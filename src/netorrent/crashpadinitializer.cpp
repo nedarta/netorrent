@@ -65,7 +65,10 @@ void CrashpadInitializer::Initialize(std::shared_ptr<pt::Core::Environment> env)
         return;
     }
 
-    if (!database->GetSettings()->SetUploadsEnabled(true))
+    std::string const reportUrl = env->GetCrashpadReportUrl();
+    bool const uploadsEnabled = !reportUrl.empty();
+
+    if (!database->GetSettings()->SetUploadsEnabled(uploadsEnabled))
     {
         BOOST_LOG_TRIVIAL(error) << "Failed to set uploads in Crashpad database";
         return;
@@ -84,7 +87,7 @@ void CrashpadInitializer::Initialize(std::shared_ptr<pt::Core::Environment> env)
     if (!client.StartHandler(base::FilePath(handlerPath.wstring()),
         base::FilePath(databasePath.wstring()),
         base::FilePath(databasePath.wstring()),
-        env->GetCrashpadReportUrl(),
+        reportUrl,
         // annotations
         {
             { "branch",              pt::BuildInfo::branch() },

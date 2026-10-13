@@ -31,16 +31,20 @@ at `picotorrent/picotorrent`; `origin` is where the NeTorrent repo will live.
 - [x] Build script auto-initializes wxWidgets' nested third-party submodules.
 - [x] libtorrent builds against the real 2.1 API (`deprfun` removed).
 - [x] Port the code to the libtorrent 2.1 API properly (drop `deprfun`).
-- [ ] Bump `CMAKE_CXX_STANDARD` from 17 to 20.
+- [ ] Bump `CMAKE_CXX_STANDARD` from 17 to 20 — blocked by the vendored ANTLR4
+      runtime (its `operator==` overloads are ambiguous under C++20). Needs
+      ANTLR4 moved to vcpkg first (see below). `CMAKE_CXX_STANDARD_REQUIRED` is on.
 - [x] Move `vendor/wx` to vcpkg's wxWidgets (upstream PR 1264).
+- [ ] Move `vendor/antlr4` to vcpkg's antlr4 (unblocks C++20).
 - [ ] Evaluate moving `vendor/vcpkg` to a standalone vcpkg (`VCPKG_ROOT`).
 
 **Dependencies**
 - [x] libtorrent: on 2.1.2.
 - [x] wxWidgets: on 3.3.3 (via vcpkg).
 - [x] OpenSSL: on 3.6.5.
-- [ ] Revisit Crashpad/Sentry wiring (crash reports currently go to PicoTorrent's
-      Sentry project).
+- [x] Crashpad/Sentry: crash reports no longer go to PicoTorrent's project.
+      Uploads are disabled by default; set `NETORRENT_CRASHPAD_URL` to point
+      them at a NeTorrent Sentry project (or bake the DSN in as the default).
 
 **Correctness / housekeeping**
 - [ ] Repoint upstream endpoints to `api.netorrent.org` once that service exists

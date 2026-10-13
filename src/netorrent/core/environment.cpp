@@ -70,12 +70,18 @@ fs::path Environment::GetApplicationPath()
 
 std::string Environment::GetCrashpadReportUrl()
 {
+    // An explicit override always wins, so crash reporting can be pointed at a
+    // self-hosted / NeTorrent endpoint without a rebuild.
     if (const char* url = std::getenv("NETORRENT_CRASHPAD_URL"))
     {
         return url;
     }
 
-    return "https://o314884.ingest.sentry.io/api/1794272/minidump/?sentry_key=722163e5427c4a8892d2c158b5ffe954";
+    // No default endpoint: crash reports are written to the local Crashpad
+    // database but not uploaded anywhere. PicoTorrent's Sentry project is no
+    // longer used. Set NETORRENT_CRASHPAD_URL (or fill in the NeTorrent DSN
+    // here) to point crash reporting at your own project.
+    return "";
 }
 
 fs::path Environment::GetCoreDbFilePath()

@@ -9,6 +9,7 @@ set(CMAKE_TOOLCHAIN_FILE   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/vcpkg/scripts/buil
 project("NeTorrent")
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --------- antlr4 options
 option(WITH_STATIC_CRT "" Off)
