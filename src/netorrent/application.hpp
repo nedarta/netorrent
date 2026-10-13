@@ -30,7 +30,7 @@ namespace API
         virtual void OnInitCmdLine(wxCmdLineParser&) wxOVERRIDE;
 
     private:
-        void ActivateOtherInstance();
+        bool ActivateOtherInstance();
         void WaitForPreviousInstance(long pid);
 
         pt::CommandLineOptions m_options;

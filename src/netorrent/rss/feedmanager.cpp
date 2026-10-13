@@ -6,6 +6,7 @@
 #include <regex>
 
 #include <boost/log/trivial.hpp>
+#include <fmt/format.h>
 #include <libtorrent/add_torrent_params.hpp>
 #include <libtorrent/load_torrent.hpp>
 #include <libtorrent/magnet_uri.hpp>
@@ -20,6 +21,8 @@
 
 using pt::RSS::Feed;
 using pt::RSS::FeedManager;
+
+wxDEFINE_EVENT(pt::RSS::ptEVT_RSS_UPDATED, wxCommandEvent);
 
 namespace
 {
@@ -94,6 +97,16 @@ void FeedManager::OnTimer(wxTimerEvent&)
     RefreshAll();
 }
 
+void FeedManager::SetStatus(std::string const& status)
+{
+    m_lastStatus = status;
+    BOOST_LOG_TRIVIAL(info) << "RSS: " << status;
+
+    auto* evt = new wxCommandEvent(ptEVT_RSS_UPDATED);
+    evt->SetString(wxString::FromUTF8(status));
+    wxQueueEvent(this, evt);
+}
+
 void FeedManager::RefreshAll()
 {
     for (Feed const& feed : GetFeeds())
@@ -102,6 +115,14 @@ void FeedManager::RefreshAll()
         {
             Fetch(feed);
         }
+    }
+}
+
+void FeedManager::RefreshFeed(Feed const& feed)
+{
+    if (feed.enabled)
+    {
+        Fetch(feed);
     }
 }
 
@@ -126,7 +147,7 @@ void FeedManager::HandleFeedBody(Feed const& feed, int statusCode, std::string c
 {
     if (statusCode != 200 || body.empty())
     {
-        BOOST_LOG_TRIVIAL(warning) << "RSS: '" << feed.name << "' returned status " << statusCode;
+        SetStatus(fmt::format("{}: request failed (status {})", feed.name, statusCode));
         return;
     }
 
@@ -135,7 +156,7 @@ void FeedManager::HandleFeedBody(Feed const& feed, int statusCode, std::string c
 
     if (!doc.Load(stream))
     {
-        BOOST_LOG_TRIVIAL(warning) << "RSS: failed to parse '" << feed.name << "'";
+        SetStatus(fmt::format("{}: could not parse the feed", feed.name));
         return;
     }
 
@@ -146,6 +167,8 @@ void FeedManager::HandleFeedBody(Feed const& feed, int statusCode, std::string c
         return;
     }
 
+    int items = 0;
+    int matched = 0;
     wxString const rootName = root->GetName();
 
     if (rootName == "rss")
@@ -162,7 +185,7 @@ void FeedManager::HandleFeedBody(Feed const& feed, int statusCode, std::string c
             {
                 if (item->GetName() == "item")
                 {
-                    ProcessItem(feed, item);
+                    ProcessItem(feed, item, items, matched);
                 }
             }
 
@@ -176,14 +199,23 @@ void FeedManager::HandleFeedBody(Feed const& feed, int statusCode, std::string c
         {
             if (item->GetName() == "entry")
             {
-                ProcessItem(feed, item);
+                ProcessItem(feed, item, items, matched);
             }
         }
     }
+    else
+    {
+        SetStatus(fmt::format("{}: unsupported feed format ({})", feed.name, rootName.ToStdString()));
+        return;
+    }
+
+    SetStatus(fmt::format("{}: {} items, {} matched", feed.name, items, matched));
 }
 
-void FeedManager::ProcessItem(Feed const& feed, wxXmlNode* item)
+void FeedManager::ProcessItem(Feed const& feed, wxXmlNode* item, int& items, int& matched)
 {
+    ++items;
+
     wxString title = ChildText(item, "title");
     wxString guid = ChildText(item, "guid");
 
@@ -215,7 +247,6 @@ void FeedManager::ProcessItem(Feed const& feed, wxXmlNode* item)
         guid = target;
     }
 
-    std::string const targetStd = target.ToStdString();
     std::string const titleStd = title.ToStdString();
 
     if (!PassesFilter(feed, titleStd))
@@ -223,36 +254,76 @@ void FeedManager::ProcessItem(Feed const& feed, wxXmlNode* item)
         return;
     }
 
-    bool const isMagnet = targetStd.rfind("magnet:", 0) == 0;
-    bool const isTorrent = targetStd.size() > 8
-        && targetStd.compare(targetStd.size() - 8, 8, ".torrent") == 0;
-
-    if (!isMagnet && !isTorrent)
-    {
-        return;
-    }
-
     if (!MarkSeen(feed.id, guid.ToStdString(), titleStd))
     {
+        return; // already processed in an earlier pass
+    }
+
+    ++matched;
+    BOOST_LOG_TRIVIAL(info) << "RSS: '" << feed.name << "' matched '" << titleStd << "'";
+    ResolveAndAdd(feed, target.ToStdString(), guid.ToStdString());
+}
+
+void FeedManager::ResolveAndAdd(Feed const& feed, std::string const& link, std::string const& guid)
+{
+    if (link.rfind("magnet:", 0) == 0 || IsTorrentUrl(link))
+    {
+        AddTorrent(feed, link, guid);
         return;
     }
 
-    BOOST_LOG_TRIVIAL(info) << "RSS: '" << feed.name << "' matched '" << titleStd << "'";
-    AddTorrent(feed, targetStd);
+    // The link may be an HTML details page, or a URL that serves the .torrent
+    // itself (many trackers use an obfuscated download URL). Fetch it and work
+    // out which.
+    m_httpClient->Get(
+        wxString::FromUTF8(link),
+        [this, feed, link, guid](int statusCode, std::string const& body)
+        {
+            if (statusCode != 200 || body.empty())
+            {
+                BOOST_LOG_TRIVIAL(info) << "RSS: could not open " << link << " (" << statusCode << ")";
+                UnmarkSeen(feed.id, guid);
+                return;
+            }
+
+            // A bencoded body is the .torrent file itself.
+            if (body[0] == 'd')
+            {
+                lt::error_code ec;
+                lt::add_torrent_params params = lt::load_torrent_buffer(
+                    lt::span<char const>(body.data(), body.size()), ec, lt::load_torrent_limits{});
+
+                if (!ec)
+                {
+                    params.save_path = SavePath();
+                    m_session->AddTorrent(params);
+                    BOOST_LOG_TRIVIAL(info) << "RSS: added torrent from '" << feed.name << "' (" << link << ")";
+                    return;
+                }
+            }
+
+            // Otherwise scrape the page for a magnet or .torrent link.
+            std::string const resolved = ExtractTorrentLink(body);
+
+            if (resolved.empty())
+            {
+                BOOST_LOG_TRIVIAL(info) << "RSS: no magnet or .torrent link found on " << link;
+                UnmarkSeen(feed.id, guid);
+                return;
+            }
+
+            AddTorrent(feed, resolved, guid);
+        });
 }
 
-void FeedManager::AddTorrent(Feed const& feed, std::string const& link)
+void FeedManager::AddTorrent(Feed const& feed, std::string const& link, std::string const& guid)
 {
     if (m_session == nullptr)
     {
         return;
     }
 
-    std::string savePath;
-    if (auto sp = m_cfg->Get<std::string>("default_save_path"); sp.has_value())
-    {
-        savePath = *sp;
-    }
+    std::string const savePath = SavePath();
 
     if (link.rfind("magnet:", 0) == 0)
     {
@@ -262,6 +333,7 @@ void FeedManager::AddTorrent(Feed const& feed, std::string const& link)
         if (ec)
         {
             BOOST_LOG_TRIVIAL(warning) << "RSS: invalid magnet '" << link << "': " << ec.message();
+            UnmarkSeen(feed.id, guid);
             return;
         }
 
@@ -273,11 +345,12 @@ void FeedManager::AddTorrent(Feed const& feed, std::string const& link)
     // Otherwise fetch the .torrent and add it from the buffer.
     m_httpClient->Get(
         wxString::FromUTF8(link),
-        [this, feed, savePath](int statusCode, std::string const& body)
+        [this, feed, guid, savePath](int statusCode, std::string const& body)
         {
             if (statusCode != 200 || body.empty())
             {
-                BOOST_LOG_TRIVIAL(warning) << "RSS: failed to download torrent from '" << feed.name << "' (" << statusCode << ")";
+                BOOST_LOG_TRIVIAL(warning) << "RSS: failed to download torrent for '" << feed.name << "' (" << statusCode << ")";
+                UnmarkSeen(feed.id, guid);
                 return;
             }
 
@@ -287,13 +360,24 @@ void FeedManager::AddTorrent(Feed const& feed, std::string const& link)
 
             if (ec)
             {
-                BOOST_LOG_TRIVIAL(warning) << "RSS: failed to parse torrent from '" << feed.name << "': " << ec.message();
+                BOOST_LOG_TRIVIAL(warning) << "RSS: failed to parse torrent for '" << feed.name << "': " << ec.message();
+                UnmarkSeen(feed.id, guid);
                 return;
             }
 
             params.save_path = savePath;
             m_session->AddTorrent(params);
         });
+}
+
+std::string FeedManager::SavePath()
+{
+    if (auto sp = m_cfg->Get<std::string>("default_save_path"); sp.has_value())
+    {
+        return *sp;
+    }
+
+    return {};
 }
 
 bool FeedManager::PassesFilter(Feed const& feed, std::string const& text) const
@@ -333,6 +417,34 @@ bool FeedManager::PassesFilter(Feed const& feed, std::string const& text) const
     return true;
 }
 
+bool FeedManager::IsTorrentUrl(std::string const& link)
+{
+    auto pos = link.find(".torrent");
+
+    return pos != std::string::npos
+        && (pos + 8 == link.size() || link[pos + 8] == '?');
+}
+
+std::string FeedManager::ExtractTorrentLink(std::string const& html)
+{
+    static const std::regex magnetRe(R"(magnet:\?xt=[^"'\s<>]+)", std::regex::icase);
+    static const std::regex torrentRe(R"((https?://[^"'\s<>]+\.torrent))", std::regex::icase);
+
+    std::smatch match;
+
+    if (std::regex_search(html, match, magnetRe))
+    {
+        return match.str();
+    }
+
+    if (std::regex_search(html, match, torrentRe))
+    {
+        return match.str();
+    }
+
+    return {};
+}
+
 bool FeedManager::MarkSeen(int feedId, std::string const& guid, std::string const& title)
 {
     auto check = m_db->CreateStatement("SELECT 1 FROM rss_item WHERE feed_id = ? AND guid = ?");
@@ -353,6 +465,16 @@ bool FeedManager::MarkSeen(int feedId, std::string const& guid, std::string cons
     insert->Execute();
 
     return true;
+}
+
+void FeedManager::UnmarkSeen(int feedId, std::string const& guid)
+{
+    // Called when an item could not be resolved to a torrent, so it is retried
+    // on the next pass instead of being skipped forever.
+    auto stmt = m_db->CreateStatement("DELETE FROM rss_item WHERE feed_id = ? AND guid = ?");
+    stmt->Bind(1, feedId);
+    stmt->Bind(2, guid);
+    stmt->Execute();
 }
 
 std::vector<Feed> FeedManager::GetFeeds()
@@ -430,6 +552,9 @@ void FeedManager::SaveFeed(Feed& feed)
         ins->Bind(4, feed.excludeFilter);
         ins->Execute();
     }
+
+    // Fetch immediately so the user gets feedback right after saving.
+    RefreshFeed(feed);
 }
 
 void FeedManager::RemoveFeed(int id)

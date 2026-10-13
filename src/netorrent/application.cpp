@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 #include <wx/cmdline.h>
 #include <wx/ipc.h>
+#include <wx/log.h>
 #include <wx/persist.h>
 #include <wx/snglinst.h>
 #include <wx/taskbarbutton.h>
@@ -81,8 +82,15 @@ bool Application::OnInit()
 
     if (m_singleInstance->IsAnotherRunning())
     {
-        ActivateOtherInstance();
-        return false;
+        if (ActivateOtherInstance())
+        {
+            return false;
+        }
+
+        // The single-instance lock is held but no running instance could be
+        // reached (a stale lock, e.g. after a crash). Start up normally rather
+        // than refusing to launch.
+        BOOST_LOG_TRIVIAL(warning) << "Single-instance lock held but no instance is reachable; starting anyway";
     }
 
     auto env = pt::Core::Environment::Create();
@@ -198,7 +206,7 @@ void Application::OnInitCmdLine(wxCmdLineParser& parser)
     parser.SetSwitchChars("-");
 }
 
-void Application::ActivateOtherInstance()
+bool Application::ActivateOtherInstance()
 {
     json j;
     j["files"] = m_options.files;
@@ -206,17 +214,25 @@ void Application::ActivateOtherInstance()
     j["silent"] = m_options.silent;
     j["save_path"] = m_options.save_path;
 
+    // wxWidgets shows an error dialog when the IPC conversation cannot be
+    // established; suppress it and report failure to the caller instead.
+    wxLogNull noLog;
+
     wxClient client;
     auto conn = client.MakeConnection(
         "localhost",
         "NeTorrent",
         "ApplicationOptions");
 
-    if (conn)
+    if (!conn)
     {
-        conn->Execute(j.dump());
-        conn->Disconnect();
+        return false;
     }
+
+    conn->Execute(j.dump());
+    conn->Disconnect();
+
+    return true;
 }
 
 void Application::WaitForPreviousInstance(long pid)

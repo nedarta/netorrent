@@ -29,6 +29,7 @@ namespace pt::UI::Dialogs
         void OnRemove(wxCommandEvent&);
         void OnRefresh(wxCommandEvent&);
         void OnSelectionChanged(wxListEvent&);
+        void OnFeedUpdated(wxCommandEvent&);
         void ReloadList();
         void ClearForm();
         int GetSelectedFeedId();
@@ -45,5 +46,6 @@ namespace pt::UI::Dialogs
         wxCheckBox* m_enabled;
         wxButton* m_addOrUpdate;
         wxButton* m_remove;
+        wxStaticText* m_status;
     };
 }

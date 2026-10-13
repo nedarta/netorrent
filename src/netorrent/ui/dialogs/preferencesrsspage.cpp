@@ -1,6 +1,7 @@
 #include "preferencesrsspage.hpp"
 
 #include <wx/listctrl.h>
+#include <wx/settings.h>
 #include <wx/statline.h>
 
 #include "../../rss/feedmanager.hpp"
@@ -55,12 +56,16 @@ PreferencesRssPage::PreferencesRssPage(wxWindow* parent, std::shared_ptr<pt::Cor
     buttons->AddStretchSpacer();
     buttons->Add(refresh, 0);
 
+    m_status = new wxStaticText(this, wxID_ANY, wxEmptyString);
+    m_status->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+
     auto sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(desc, 0, wxEXPAND | wxBOTTOM, FromDIP(8));
     sizer->Add(m_list, 1, wxEXPAND | wxBOTTOM, FromDIP(8));
     sizer->Add(new wxStaticLine(this), 0, wxEXPAND | wxBOTTOM, FromDIP(8));
     sizer->Add(form, 0, wxEXPAND | wxBOTTOM, FromDIP(8));
-    sizer->Add(buttons, 0, wxEXPAND);
+    sizer->Add(buttons, 0, wxEXPAND | wxBOTTOM, FromDIP(8));
+    sizer->Add(m_status, 0, wxEXPAND);
 
     this->SetSizer(sizer);
 
@@ -68,6 +73,12 @@ PreferencesRssPage::PreferencesRssPage(wxWindow* parent, std::shared_ptr<pt::Cor
     m_remove->Bind(wxEVT_BUTTON, &PreferencesRssPage::OnRemove, this);
     refresh->Bind(wxEVT_BUTTON, &PreferencesRssPage::OnRefresh, this);
     m_list->Bind(wxEVT_LIST_ITEM_SELECTED, &PreferencesRssPage::OnSelectionChanged, this);
+
+    if (m_feedManager != nullptr)
+    {
+        m_feedManager->Bind(pt::RSS::ptEVT_RSS_UPDATED, &PreferencesRssPage::OnFeedUpdated, this);
+        m_status->SetLabel(wxString::FromUTF8(m_feedManager->GetLastStatus()));
+    }
 
     ReloadList();
 }
@@ -192,4 +203,10 @@ void PreferencesRssPage::OnRemove(wxCommandEvent&)
 void PreferencesRssPage::OnRefresh(wxCommandEvent&)
 {
     m_feedManager->RefreshAll();
+}
+
+void PreferencesRssPage::OnFeedUpdated(wxCommandEvent& evt)
+{
+    m_status->SetLabel(evt.GetString());
+    Layout();
 }
