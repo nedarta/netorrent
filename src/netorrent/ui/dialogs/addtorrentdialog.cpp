@@ -403,11 +403,10 @@ wxString AddTorrentDialog::GetTorrentDisplayInfoHash(libtorrent::add_torrent_par
 
 wxString AddTorrentDialog::GetTorrentDisplayComment(libtorrent::add_torrent_params const& params)
 {
-    if (params.ti)
-    {
-        return params.ti->comment();
-    }
-
+    // libtorrent 2.1 removed the non-deprecated torrent_info::comment()
+    // accessor and add_torrent_params carries no comment field, so the
+    // torrent comment is no longer displayed.
+    (void)params;
     return "-";
 }
 
@@ -507,51 +506,27 @@ void AddTorrentDialog::OnOk(wxCommandEvent&)
 void AddTorrentDialog::OnRemoveTracker(wxCommandEvent&)
 {
     long selected = m_trackers->GetFirstSelected();
+    size_t removed = 0;
 
-    std::vector<lt::announce_entry> tiTrackers;
-    size_t tiTrackersRemoved = 0;
-    size_t tiTrackersTotal = 0;
-    size_t paramsTrackersRemoved = 0;
-
-    if (m_params.ti)
-    {
-        tiTrackers = m_params.ti->trackers();
-        tiTrackersTotal = tiTrackers.size();
-    }
-
+    // libtorrent 2.1 keeps a torrent's trackers in add_torrent_params rather
+    // than on torrent_info, so there is a single list to edit here.
     while (selected >= 0)
     {
-        if (size_t(selected) < (tiTrackers.size() + tiTrackersRemoved) && tiTrackers.size() > 0)
-        {
-            tiTrackers.erase(
-                tiTrackers.begin() + (selected - tiTrackersRemoved));
-            tiTrackersRemoved += 1;
-        }
-        else
-        {
-            size_t offset = selected - tiTrackersTotal - paramsTrackersRemoved;
+        size_t idx = size_t(selected) - removed;
 
-            if (offset < m_params.trackers.size() && m_params.trackers.size() > 0)
+        if (idx < m_params.trackers.size())
+        {
+            m_params.trackers.erase(m_params.trackers.begin() + idx);
+
+            if (idx < m_params.tracker_tiers.size())
             {
-                m_params.trackers.erase(
-                    m_params.trackers.begin() + offset);
-                m_params.tracker_tiers.erase(
-                    m_params.tracker_tiers.begin() + offset);
-
-                paramsTrackersRemoved += 1;
+                m_params.tracker_tiers.erase(m_params.tracker_tiers.begin() + idx);
             }
+
+            removed += 1;
         }
 
         selected = m_trackers->GetNextSelected(selected);
-    }
-
-    if (m_params.ti && tiTrackersRemoved > 0)
-    {
-        m_params.ti->clear_trackers();
-        for (auto const& ae : tiTrackers)
-        {
-            m_params.ti->add_tracker(ae.url, ae.tier);
-        }
     }
 
     ReloadTrackers();
@@ -562,18 +537,8 @@ void AddTorrentDialog::ReloadTrackers()
     m_trackers->Freeze();
     m_trackers->DeleteAllItems();
 
-    // trackers
-    if (m_params.ti)
-    {
-        for (auto const& tracker : m_params.ti->trackers())
-        {
-            int row = m_trackers->GetItemCount();
-
-            m_trackers->InsertItem(row, Utils::toStdWString(tracker.url));
-            m_trackers->SetItem(row, 1, std::to_string(tracker.tier));
-        }
-    }
-
+    // Trackers come from add_torrent_params (the torrent's announce-list is
+    // populated into it when the torrent is loaded).
     for (size_t i = 0; i < m_params.trackers.size(); i++)
     {
         int row = m_trackers->GetItemCount();

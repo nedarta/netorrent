@@ -187,15 +187,7 @@ target_compile_definitions(
     -DNETORRENT_WX_GIT_COMMITISH=${NETORRENT_WX_GIT_COMMITISH}
 )
 
-target_compile_options(
-    NeTorrent
-    PRIVATE
-    /guard:cf /W4 /WX
-    # We build libtorrent with its deprecated API enabled (vcpkg 'deprfun' feature)
-    # on purpose for now, which makes every deprecated symbol emit C4996. /WX would
-    # turn those into build errors, so silence C4996 until the 2.1 port lands.
-    /wd4996
-)
+target_compile_options(NeTorrent PRIVATE /guard:cf /W4 /WX)
 
 target_include_directories(
     NeTorrent

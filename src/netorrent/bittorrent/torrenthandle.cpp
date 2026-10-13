@@ -317,7 +317,7 @@ std::unique_ptr<TorrentStatus> TorrentHandle::Update(lt::torrent_status const& t
 
         if (ts.error_file >= lt::file_index_t{ 0 } && ti)
         {
-            error_details = ti->files().file_path(ts.error_file);
+            error_details = ti->layout().file_path(ts.error_file);
         }
     }
 

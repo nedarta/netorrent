@@ -100,7 +100,7 @@ void FileStorageModel::RebuildTree(std::shared_ptr<const lt::torrent_info> ti)
         return;
     }
 
-    lt::file_storage const& files = ti->files();
+    lt::file_storage const& files = ti->layout();
 
     for (lt::file_index_t idx : files.file_range())
     {

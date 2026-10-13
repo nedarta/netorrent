@@ -2,9 +2,12 @@
 
 #include <filesystem>
 #include <fstream>
+#include <memory>
 
+#include <libtorrent/add_torrent_params.hpp>
 #include <libtorrent/create_torrent.hpp>
 #include <libtorrent/magnet_uri.hpp>
+#include <libtorrent/write_resume_data.hpp>
 #include <wx/clipbrd.h>
 
 #include "../bittorrent/torrenthandle.hpp"
@@ -157,7 +160,20 @@ TorrentContextMenu::TorrentContextMenu(wxWindow* parent, std::shared_ptr<pt::Cor
 
             for (auto torrent : selectedTorrents)
             {
-                ss << lt::make_magnet_uri(torrent->WrappedHandle()) << "\n";
+                auto handle = torrent->WrappedHandle();
+
+                // libtorrent 2.1 dropped make_magnet_uri(torrent_handle); build
+                // the magnet from an add_torrent_params instead.
+                lt::add_torrent_params magnet;
+                magnet.info_hashes = handle.info_hashes();
+                magnet.name = torrent->Status().name;
+
+                for (auto const& tracker : handle.trackers())
+                {
+                    magnet.trackers.push_back(tracker.url);
+                }
+
+                ss << lt::make_magnet_uri(magnet) << "\n";
             }
 
             TextOutputDialog dlg(m_parent, wxID_ANY, i18n("magnet_link_s"), i18n("exported_magnet_link_s"));
@@ -185,10 +201,19 @@ TorrentContextMenu::TorrentContextMenu(wxWindow* parent, std::shared_ptr<pt::Cor
 
             for (auto torrent : selectedTorrents)
             {
-                if (auto tf = torrent->WrappedHandle().torrent_file_with_hashes())
+                if (auto tf = torrent->WrappedHandle().torrent_file())
                 {
-                    lt::create_torrent ct(*tf.get());
-                    lt::entry e = ct.generate();
+                    // libtorrent 2.1 removed create_torrent(torrent_info const&);
+                    // serialise the torrent via write_torrent_file().
+                    lt::add_torrent_params atp;
+                    atp.ti = std::const_pointer_cast<lt::torrent_info>(tf);
+
+                    for (auto const& tracker : torrent->WrappedHandle().trackers())
+                    {
+                        atp.trackers.push_back(tracker.url);
+                    }
+
+                    lt::entry e = lt::write_torrent_file(atp);
 
                     std::string fileName = tf->name() + ".torrent";
                     std::ofstream out(outputDir / fileName, std::ios::binary);

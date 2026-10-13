@@ -1077,7 +1077,7 @@ void Session::SaveTorrents()
     {
         if (!st.handle.is_valid()
             || !st.has_metadata
-            || !st.need_save_resume)
+            || !st.need_save_resume_data)
         {
             continue;
         }
@@ -1109,15 +1109,21 @@ void Session::SaveTorrents()
         // Store the magnet uri
         stmt = m_db->CreateStatement("REPLACE INTO torrent_magnet_uri (info_hash, magnet_uri, save_path) VALUES (?, ?, ?);");
         stmt->Bind(1, str(st.info_hashes));
-        stmt->Bind(2, lt::make_magnet_uri(st.handle));
+        // Build the magnet from add_torrent_params; libtorrent 2.1 dropped the
+        // make_magnet_uri(torrent_handle) overload.
+        lt::add_torrent_params magnetParams;
+        magnetParams.info_hashes = st.info_hashes;
+
+        stmt->Bind(2, lt::make_magnet_uri(magnetParams));
         stmt->Bind(3, st.handle.status(lt::torrent_handle::query_save_path).save_path);
         stmt->Execute();
     }
 
     while (numOutstandingResumeData > 0)
     {
-        lt::alert const* tmp = m_session->wait_for_alert(lt::seconds(10));
-        if (tmp == nullptr) { continue; }
+        // libtorrent 2.1: wait_for_alert() returns whether an alert is pending
+        // (the alert* form was the ABI<4 compatibility return type).
+        if (!m_session->wait_for_alert(lt::seconds(10))) { continue; }
 
         std::vector<lt::alert*> alerts;
         m_session->pop_alerts(&alerts);

@@ -2,12 +2,14 @@
 
 #include <filesystem>
 #include <fstream>
+#include <vector>
 
 #include <boost/log/trivial.hpp>
 #include <fmt/format.h>
 #include <fmt/xchar.h>
 #include <libtorrent/add_torrent_params.hpp>
 #include <libtorrent/create_torrent.hpp>
+#include <libtorrent/load_torrent.hpp>
 #include <libtorrent/torrent_info.hpp>
 #include <wx/hyperlink.h>
 #include <wx/tokenzr.h>
@@ -225,9 +227,12 @@ CreateTorrentDialog::CreateTorrentDialog(wxWindow* parent, wxWindowID id, std::s
 
             if (m_addToSession->IsChecked())
             {
-                lt::add_torrent_params p;
+                // libtorrent 2.1: load via load_torrent_file() (the torrent_info
+                // path constructor was removed).
+                lt::error_code loadEc;
+                lt::add_torrent_params p = lt::load_torrent_file(
+                    save.GetPath().ToStdString(), loadEc, lt::load_torrent_limits{});
                 p.save_path = sp.bp;
-                p.ti = std::make_shared<lt::torrent_info>(save.GetPath().ToStdString());
                 m_session->AddTorrent(p);
             }
 
@@ -270,10 +275,32 @@ void CreateTorrentDialog::GenerateTorrent(std::unique_ptr<CreateTorrentParams> p
     if (p->mode == Mode::v1) { flags = lt::create_torrent::v1_only; }
     if (p->mode == Mode::v2) { flags = lt::create_torrent::v2_only; }
 
-    lt::file_storage fs;
-    lt::add_files(fs, p->path, flags);
+    // libtorrent 2.1 replaced add_files()/create_torrent(file_storage&) with a
+    // vector of create_file_entry. Walk the selected path to build it; paths are
+    // relative to the parent directory, matching branch_path() used below.
+    fs::path selected(p->path);
+    fs::path base(branch_path(p->path));
+    std::vector<lt::create_file_entry> files;
 
-    lt::create_torrent ct(fs, 0, flags);
+    if (fs::is_regular_file(selected))
+    {
+        files.emplace_back(
+            fs::relative(selected, base).generic_string(),
+            static_cast<std::int64_t>(fs::file_size(selected)));
+    }
+    else
+    {
+        for (auto const& entry : fs::recursive_directory_iterator(selected))
+        {
+            if (!entry.is_regular_file()) { continue; }
+
+            files.emplace_back(
+                fs::relative(entry.path(), base).generic_string(),
+                static_cast<std::int64_t>(entry.file_size()));
+        }
+    }
+
+    lt::create_torrent ct(std::move(files), 0, flags);
     ct.set_comment(p->comment.c_str());
     ct.set_creator(p->creator.c_str());
     ct.set_priv(p->priv);

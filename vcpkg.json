@@ -6,7 +6,7 @@
   "dependencies": [
     "boost-log",
     "fmt",
-    { "name": "libtorrent", "features": ["deprfun"] },
+    "libtorrent",
     "nlohmann-json",
     "sqlite3",
     "wxwidgets"

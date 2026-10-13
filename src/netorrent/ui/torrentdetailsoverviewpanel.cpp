@@ -200,7 +200,7 @@ void TorrentDetailsOverviewPanel::Refresh(pt::BitTorrent::TorrentHandle* torrent
 
     if (auto tf = status.torrentFile.lock())
     {
-        m_comment->SetLabel(tf->comment());
+        m_comment->SetLabel("-");
         m_priv->SetLabel(
             tf->priv()
             ? i18n("yes")
