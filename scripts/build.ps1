@@ -159,6 +159,15 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # --- Build -------------------------------------------------------------------
+# A running instance holds NeTorrent.exe open, which makes the linker fail with
+# LNK1104. Stop it first so rebuilds are not blocked by the app under test.
+$running = Get-Process -Name NeTorrent -ErrorAction SilentlyContinue
+if ($running) {
+    Write-Host "==> Stopping running NeTorrent ($(($running | ForEach-Object { $_.Id }) -join ', ')) to allow relink"
+    $running | Stop-Process -Force -ErrorAction SilentlyContinue
+    Start-Sleep -Milliseconds 700
+}
+
 $buildArgs = @('--build', $BuildDir, '--config', $Configuration)
 if ($Target) { $buildArgs += @('--target', $Target) }
 $buildLog = Join-Path $BuildDir 'build.log'
