@@ -79,6 +79,12 @@ packaging), #931 (RSS monitor — upstream PR is an incomplete stub).
 Also implemented from upstream **issues**: #1288 — "Downloaded" and
 "Uploaded" columns in the torrent list.
 
+**#931 — RSS feed monitoring** was implemented as a full feature (upstream's PR
+was only a stub): feed polling, RSS 2.0 + Atom parsing, per-feed include/exclude
+filters (substring or regex), automatic adding of matching magnet links and
+`.torrent` URLs, per-feed de-duplication, and a Preferences page to manage
+feeds.
+
 ## Layout
 
 ```
