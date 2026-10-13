@@ -111,6 +111,9 @@ add_executable(
     src/netorrent/ipc/applicationoptionsconnection
     src/netorrent/ipc/server
 
+    # RSS
+    src/netorrent/rss/feedmanager
+
     # Dialogs
     src/netorrent/ui/dialogs/aboutdialog
     src/netorrent/ui/dialogs/addmagnetlinkdialog
@@ -125,6 +128,7 @@ add_executable(
     src/netorrent/ui/dialogs/preferencesgeneralpage
     src/netorrent/ui/dialogs/preferenceslabelspage
     src/netorrent/ui/dialogs/preferencesproxypage
+    src/netorrent/ui/dialogs/preferencesrsspage
     src/netorrent/ui/dialogs/textoutputdialog
 
     # Filters
@@ -206,7 +210,7 @@ target_link_libraries(
     Boost::log
 
     # wxWidgets
-    wx::core wx::base wx::propgrid
+    wx::core wx::base wx::propgrid wx::xml
 
     # Windows
     Comctl32

@@ -27,6 +27,7 @@
 #include "../core/environment.hpp"
 #include "../core/utils.hpp"
 #include "../ipc/server.hpp"
+#include "../rss/feedmanager.hpp"
 #include "console.hpp"
 #include "dialogs/aboutdialog.hpp"
 #include "dialogs/addmagnetlinkdialog.hpp"
@@ -58,6 +59,7 @@ MainFrame::MainFrame(std::shared_ptr<pt::Core::Environment> env, std::shared_ptr
     m_cfg(cfg),
     m_options(options),
     m_session(new BitTorrent::Session(this, db, cfg, env)),
+    m_feedManager(std::make_unique<RSS::FeedManager>(db, cfg)),
     m_splitter(new wxSplitterWindow(this, ptID_MAIN_SPLITTER)),
     m_statusBar(new StatusBar(this)),
     m_taskBarIcon(new TaskBarIcon(this)),
@@ -68,6 +70,9 @@ MainFrame::MainFrame(std::shared_ptr<pt::Core::Environment> env, std::shared_ptr
     m_menuItemFilters(nullptr),
     m_ipc(std::make_unique<IPC::Server>(this))
 {
+    m_feedManager->SetSession(m_session.get());
+    m_feedManager->Start();
+
     m_console = new Console(this, wxID_ANY, m_torrentListModel, m_cfg->IsDarkMode());
 
     m_splitter->SetWindowStyleFlag(
@@ -775,7 +780,7 @@ void MainFrame::OnTaskBarLeftDown(wxTaskBarIconEvent&)
 
 void MainFrame::OnViewPreferences(wxCommandEvent&)
 {
-    Dialogs::PreferencesDialog dlg(this, m_cfg);
+    Dialogs::PreferencesDialog dlg(this, m_cfg, m_feedManager.get());
     
     if (dlg.ShowModal() == wxID_OK)
     {

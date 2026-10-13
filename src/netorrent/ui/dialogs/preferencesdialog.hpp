@@ -16,6 +16,10 @@ namespace Core
 {
     class Configuration;
 }
+namespace RSS
+{
+    class FeedManager;
+}
 namespace UI
 {
 namespace Dialogs
@@ -26,11 +30,12 @@ namespace Dialogs
     class PreferencesGeneralPage;
     class PreferencesLabelsPage;
     class PreferencesProxyPage;
+    class PreferencesRssPage;
 
     class PreferencesDialog : public wxDialog
     {
     public:
-        PreferencesDialog(wxWindow* parent, std::shared_ptr<Core::Configuration> cfg);
+        PreferencesDialog(wxWindow* parent, std::shared_ptr<Core::Configuration> cfg, RSS::FeedManager* feedManager);
         virtual ~PreferencesDialog();
         bool WantsRestart() { return m_wantsRestart; }
 
@@ -54,6 +59,7 @@ namespace Dialogs
         PreferencesLabelsPage* m_labels;
         PreferencesConnectionPage* m_connection;
         PreferencesProxyPage* m_proxy;
+        PreferencesRssPage* m_rss;
         PreferencesAdvancedPage* m_advanced;
     };
 }
