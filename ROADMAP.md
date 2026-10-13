@@ -12,7 +12,8 @@ still-healthy [`arvidn/libtorrent`](https://github.com/arvidn/libtorrent) engine
 | Upstream imported (fork of `picotorrent` @ `24e3e86`) | done, kept as `upstream` remote |
 | Rebranded to NeTorrent | done |
 | Build toolchain (VS 2022 Build Tools + CMake 3.31 + vcpkg) | done |
-| vcpkg manifest working (`deprfun` for libtorrent 2.1.2 compat) | done |
+| vcpkg manifest working (libtorrent 2.1.2, no deprecated API) | done |
+| libtorrent 2.1 API port (deprfun removed) | done |
 | rag-rat semantic index (`src`, `include`, `src/pql`, docs) | done — 1040 chunks embedded |
 | First green build | done — `NeTorrent.exe` runs, migrates DB, loads translations, listens on 6881 |
 | MVP features | not started |
@@ -28,25 +29,26 @@ at `picotorrent/picotorrent`; `origin` is where the NeTorrent repo will live.
 - [x] Pin the vcpkg manifest `builtin-baseline`.
 - [x] Fix `src/pql`'s dead `git://` URL (GitHub dropped git protocol).
 - [x] Build script auto-initializes wxWidgets' nested third-party submodules.
-- [x] libtorrent builds against the 2.0-era API via the vcpkg `deprfun` feature
-      (interim; see the port item below).
-- [ ] Port the code to the libtorrent 2.1 API properly (drop `deprfun`).
-- [ ] Bump `CMAKE_CXX_STANDARD` from 17 to 20 once the baseline is green.
-- [ ] Evaluate moving `vendor/wx` and `vendor/vcpkg` to vcpkg-provided packages.
+- [x] libtorrent builds against the real 2.1 API (`deprfun` removed).
+- [x] Port the code to the libtorrent 2.1 API properly (drop `deprfun`).
+- [ ] Bump `CMAKE_CXX_STANDARD` from 17 to 20.
+- [x] Move `vendor/wx` to vcpkg's wxWidgets (upstream PR 1264).
+- [ ] Evaluate moving `vendor/vcpkg` to a standalone vcpkg (`VCPKG_ROOT`).
 
 **Dependencies**
-- [ ] libtorrent: track 2.1.x (currently whatever vcpkg resolves; upstream targeted 2.0).
-- [ ] wxWidgets: track 3.2.x.
-- [ ] OpenSSL: 3.x (upstream docs still reference 1.1.1).
-- [ ] Revisit Crashpad/Sentry wiring (upstream endpoint is PicoTorrent's).
+- [x] libtorrent: on 2.1.2.
+- [x] wxWidgets: on 3.3.3 (via vcpkg).
+- [x] OpenSSL: on 3.6.5.
+- [ ] Revisit Crashpad/Sentry wiring (crash reports currently go to PicoTorrent's
+      Sentry project).
 
 **Correctness / housekeeping**
-- [ ] Replace upstream service endpoints (`api.picotorrent.org` update-check and
-      GeoIP mirror, Sentry DSN) or disable them by default.
+- [ ] Repoint upstream endpoints to `api.netorrent.org` once that service exists
+      (the update-check and GeoIP defaults reference `api.picotorrent.org`).
+      Deliberately left intact for now.
 - [ ] New NeTorrent icon set (current icons still show the PicoTorrent logo).
 - [ ] Update `docs/` for the new name/URLs.
-- [ ] CMake 4.x compatibility audit (old vendored subprojects declare low
-      `cmake_minimum_required`).
+- [ ] CMake 4.x compatibility audit (low priority; build pins VS-bundled CMake 3.31).
 
 ## MVP scope (first milestone)
 
@@ -73,6 +75,9 @@ into NeTorrent (rebranded, and where needed adjusted for the modernized stack):
 Deliberately not ported: #1002 / #1243 (Linux), #1125 (client/server split —
 too large/WIP), #1225 (libtorrent bump — already superseded), #1010 (AppX
 packaging), #931 (RSS monitor — upstream PR is an incomplete stub).
+
+Also implemented from upstream **issues**: #1288 — "Downloaded" and
+"Uploaded" columns in the torrent list.
 
 ## Layout
 
